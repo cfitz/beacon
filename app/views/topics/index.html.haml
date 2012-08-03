@@ -1,0 +1,16 @@
+- model_class = Topic
+.page-header
+  %h1=t '.title', :default => model_class.model_name.human.pluralize
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Type
+      %th Number of items
+  %tbody
+    - @topics.each do |topic|
+      %tr
+        %td= link_to(topic[:n].name, topic[:n])
+        %td= topic[:n].class.model_name
+        %td= topic[:"count(r)"]
+

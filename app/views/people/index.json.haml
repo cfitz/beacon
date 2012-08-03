@@ -1,0 +1,6 @@
+- people_array = []
+- @people.each do |person|
+  - people_array << { "id" => person.id, "name" => person.name, "title" => person.title }
+
+:plain
+  #{people_array.to_json}
