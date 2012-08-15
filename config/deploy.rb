@@ -2,23 +2,29 @@ require 'torquebox-capistrano-support'
 require 'bundler/capistrano'
 
 # SCM
-set :application,       "http://ec2-23-20-125-106.compute-1.amazonaws.com/"
-#set :repository,        "git@github.com:cfitz/beacon.git"
-#set :branch,            "torquebox-2.0"
+server       "ec2-50-17-20-240.compute-1.amazonaws.com", :web, :app, :primary => true
+set :repository,        "git@github.com:cfitz/beacon.git"
+set :branch,            "master"
 set :user,              "ec2-user"
-set :scm,               :none
-#set :scm_verbose,       true
-#set :use_sudo,          false
+set :scm,               :git
+set :scm_verbose,       true
+set :use_sudo,          false
 
 # Production server
-set :deploy_to,         "/opt/apps/myapp.com"
+set :deploy_to,         "/opt/apps/beacon.se"
 set :torquebox_home,    "/opt/torquebox/current"
 set :jboss_init_script, "/etc/init.d/jboss-as-standalone"
 set :app_environment,   "RAILS_ENV: production"
 set :app_context,       "/"
 
+default_run_options[:pty] = true  # Must be set for the password prompt from git to work
+# ssh_options[:forward_agent] = true
+set :deploy_via, :remote_cache
+ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh", "aws_key.pem")]
 
-ssh_options[:keys] = ["/Users/chrisfitzpatrick/Downloads.WMU_Cloud.pem"] unless 'development' == rails_env
+set :torquebox_home, '/opt/torquebox/current'
+set :jboss_init_script, '/etc/init.d/jboss-as-standalone'
+
 
 
 #set :scm, :subversion

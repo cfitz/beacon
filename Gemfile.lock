@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/andreasronge/neo4j-core.git
-  revision: eaa4941681b6e6876389e85127d14b62e6136532
+  revision: 2152a2dcdf4dc09142a993032dc4d6e4866e94ff
   specs:
-    neo4j-core (2.0.1-java)
+    neo4j-core (2.1.0-java)
       neo4j-community (>= 1.8.M05, < 1.9)
 
 GIT
@@ -16,16 +16,17 @@ GIT
 
 GIT
   remote: git://github.com/andreasronge/neo4j.git
-  revision: d759f27ad08309f8554bb3b10bad63debedc9625
+  revision: c6c1922106704c69fca43b4e871dd890478d0fe6
   specs:
-    neo4j (2.0.1-java)
+    neo4j (2.1.0.alpha1-java)
       activemodel (>= 3.0.0, < 3.3)
-      neo4j-wrapper (= 2.0.1)
+      neo4j-wrapper (= 2.1.0)
       orm_adapter (>= 0.0.3)
       railties (>= 3.0.0, < 3.3)
 
-PATH
-  remote: /Users/chrisfitzpatrick/code/devise-neo4j
+GIT
+  remote: git@github.com:cfitz/devise-neo4j.git
+  revision: 3eb65a547dabd69597ad79b0918885b4b106f897
   specs:
     devise-neo4j (1.0.3)
       devise
@@ -162,8 +163,8 @@ GEM
     multipart-post (1.1.5)
     neo4j-admin (0.1.0-java)
     neo4j-community (1.8.M07-java)
-    neo4j-wrapper (2.0.1-java)
-      neo4j-core (= 2.0.1)
+    neo4j-wrapper (2.1.0-java)
+      neo4j-core (= 2.1.0)
     neo4jrb-paperclip (0.0.1-java)
       paperclip (~> 2.3.6)
     nested_form (0.2.2)

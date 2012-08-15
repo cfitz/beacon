@@ -9,7 +9,7 @@ gem 'neo4j', :git => "git://github.com/andreasronge/neo4j.git"
 gem 'neo4j-core', :git => 'git://github.com/andreasronge/neo4j-core.git'
 
 gem 'devise', "2.0.4"
-gem 'devise-neo4j', :path =>  "/Users/chrisfitzpatrick/code/devise-neo4j"
+gem 'devise-neo4j', :git => "git@github.com:cfitz/devise-neo4j.git"
 gem 'omniauth-google-oauth2'
 gem "paperclip", '2.3.16'
 gem "neo4jrb-paperclip", :require => "neo4jrb_paperclip"
