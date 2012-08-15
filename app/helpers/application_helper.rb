@@ -35,4 +35,49 @@ module ApplicationHelper
   end
   
 
+  
+  def render_sign_in
+    result = "<li class='dropdown pull-right' id='signin'>"
+    result << "<a href='#' class = 'dropdown-toggle' data-toggle ='dropdown'>Sign In
+      <b class='caret'></b></a>"
+    result << "<ul class='dropdown-menu'><li>#{link_to 'with Google', user_omniauth_authorize_path(:google_oauth2)}</li><li>#{ link_to 'with Beacon', new_user_session_path}</li></ul>"
+    result << "</li>"
+    result.html_safe
+  end
+  
+  def render_sign_out
+    result = "<li class='dropdown pull-right' id='signout'>"
+    result << "<a href='#' class='dropdown-toggle' data-toggle ='dropdown'>My Account
+    <b class='caret'></b>
+    </a>"
+    result << "<ul class='dropdown-menu'><li>#{ link_to('Sign Out', destroy_user_session_path, :method => :delete) }</li></ul>"
+    result << "</li>"
+    result.html_safe
+  end
+ 
+  #takes a date an makes sure it doesn't look stupid
+  def pretty_date(date)
+    dt = DateTime.parse(date)
+    if dt.month == 1 && dt.day == 1
+      return "(#{dt.year})"
+    else
+      return "(#{date})"
+    end
+  rescue
+    return "Unknown"
+  end
+ 
+  # this returns a list to be used in index views to show associated items. it takes a neo4j traversal, which is just a fancy ennumerable
+  def associated_index_list(assoc_objs, list_class = "#{assoc_objs.first.class.to_s.downcase}_list")
+    unless assoc_objs.first.nil?
+      results = "<ul class='associated_items #{list_class}' >"
+      assoc_objs.each { |obj| results << "<li>#{ link_to obj.name, obj  }</li>" }
+      results << "</ul>"
+      results.html_safe
+    end
+  end
+    
+ 
+ 
+ 
 end

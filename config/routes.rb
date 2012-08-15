@@ -1,31 +1,31 @@
 Beacon::Application.routes.draw do
+  get "search" => "search#index"
+
+  get "home/index"
+
   resources :things
-
   resources :places
-
   resources :events
-
   resources :corporate_bodies
-
   resources :concepts
-
   resources :topics
-
   resources :sections
   resources :people
   resources :annotations
   resources :pages
   resources :items
+  
   resources :documents do
     get "creator/:person_id" => 'documents#show_creator_relation'
     match "creator/:person_id" => 'documents#delete_creator_relation', :via => :delete, :as => "delete_creator"
   end
 
-  devise_for :users
+  devise_for :users, :controllers => {:registrations => "registrations", :omniauth_callbacks => "users/omniauth_callbacks"}
+  resources :users
 
 
-  root :to => 'documents#index'
-  
+ # root :to => 'documents#index'
+  root :to => 'home#index'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

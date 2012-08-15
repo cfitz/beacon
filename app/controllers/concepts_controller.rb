@@ -2,7 +2,8 @@ class ConceptsController < ApplicationController
   # GET /concepts
   # GET /concepts.json
   def index
-    @concepts = Concept.all
+    @concepts = Concept.all.paginate(:page => params[:page], :per_page => 10 )
+    
 
     respond_to do |format|
       format.html # index.html.erb

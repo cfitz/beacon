@@ -2,33 +2,33 @@
 .page-header
   %h1=t '.title', :default => model_class.model_name.human
 
-%p
-  %strong= model_class.human_attribute_name(:title) + ':'
-  %br
-  = @document.title
-%p
-  %strong= model_class.human_attribute_name(:uuid) + ':'
-  %br
-  = @document.uuid
-%p
-  %strong= model_class.human_attribute_name(:date) + ':'
-  %br
-  = @document.date
-%p
-  %strong= model_class.human_attribute_name(:summary) + ':'
-  %br
-  = @document.summary
-%p
-  %strong= model_class.human_attribute_name(:creators) + ":"
-  %ul
-  - @document.creators.each do |creator|
-    %li= link_to(creator.name, creator)
-%p 
-  %strong= model_class.human_attribute_name(:items) + ":"
-  %ul
-  - @document.items.each do |item|
-    %li=  link_to("See Documents", item.attachment.url) 
-.form-actions
-  = link_to t('.back', :default => t("helpers.links.back")), documents_path, :class => 'btn'
-  = link_to t('.edit', :default => t("helpers.links.edit")), edit_document_path(@document), :class => 'btn'
-  = link_to t('.destroy', :default => t("helpers.links.destroy")), document_path(@document), :method => "delete", :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')), :class => 'btn btn-danger'
+
+%dl.dl-horizontal
+  %dt= model_class.human_attribute_name(:title) + ':'
+  %dd= @document.title
+    
+  %dt= model_class.human_attribute_name(:date) + ':'
+  %dd= pretty_date(@document.date)
+
+  %dt= model_class.human_attribute_name(:creators) + ":"
+  %dd
+    %ul
+      - @document.creators.each do |creator|
+        %li= link_to(creator.name, creator)
+
+  %dt= model_class.human_attribute_name(:topics) + ":"
+  %dd
+    =  associated_index_list(@document.topics)
+
+  %dt= model_class.human_attribute_name(:items) + ":"
+  %dd
+    = item_list(@document.items, "ul", nil)
+ 
+        
+  %dt= model_class.human_attribute_name(:summary) + ':'
+  %dd= @document.summary
+- if current_user && current_user.admin?
+  .form-actions
+    = link_to t('.back', :default => t("helpers.links.back")), documents_path, :class => 'btn'
+    = link_to t('.edit', :default => t("helpers.links.edit")), edit_document_path(@document), :class => 'btn'
+    = link_to t('.destroy', :default => t("helpers.links.destroy")), document_path(@document), :method => "delete", :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')), :class => 'btn btn-danger'

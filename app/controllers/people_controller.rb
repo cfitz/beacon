@@ -3,7 +3,7 @@ class PeopleController < ApplicationController
   # GET /people.json
   def index
     
-    params[:q].blank? ? @people = Person.all : @people = Person.all("name: #{params[:q].split(" ").first}*", :type => :fulltext)
+    params[:q].blank? ? @people = Person.all.paginate(:page => params[:page], :per_page => 10 ) : @people = Person.all("name: #{params[:q].split(" ").first}*", :type => :fulltext).asc(:name).paginate(:page => params[:page], :per_page => 10 )
     
       
     respond_to do |format|

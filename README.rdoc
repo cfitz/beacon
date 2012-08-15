@@ -63,11 +63,13 @@ rails g scaffold Person name:string title:string --indices name title --skip-sty
 
 
 rails g scaffold Subject  subject_type:string term:string --indices subject_type term --has_n concepts:Concept places:Place things:Thing events:Event works:Work corporateBodies:CorporateBody Persons:Person --skip-stylesheets
-rails g scaffold Concept term:string --indices term --skip-stylesheets
-rails g scaffold CorporateBody  term:string --indices name place --skip-stylesheets
-rails g scaffold Event term:string --indices term --skip-stylesheets
-rails g scaffold Place term:string --indices term --skip-stylesheets
-rails g scaffold Thing term:string --indices term --skip-stylesheets
+
+
+rails g scaffold Concept name:string --indices name --skip-stylesheets
+rails g scaffold CorporateBody  name:string --indices name place --skip-stylesheets
+rails g scaffold Event name:string --indices name --skip-stylesheets
+rails g scaffold Place name:string --indices name --skip-stylesheets
+rails g scaffold Thing name:string --indices name --skip-stylesheets
 
 Now do a rails g bootstrap:themed for each of the scaffolds....
 

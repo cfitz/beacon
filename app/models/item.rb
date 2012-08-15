@@ -1,11 +1,16 @@
 class Item < Neo4j::Rails::Model
-  
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
   include Neo4jrb::Paperclip
+   index :id
    
+  before_save { |record| record.uri = record.attachment.url if record.uri.blank?  }
+   
+  
   property :parent_uuid, :type => String
   
   property :uri, :type => String
-  property :format, :type => String, :index => :exact
+  property :item_type, :type => String, :index => :exact
 
   property :created_at, :type => DateTime
   index :created_at

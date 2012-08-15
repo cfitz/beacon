@@ -1,5 +1,6 @@
 require 'marc'
 require 'pdf-reader'
+require 'open-uri'
 
 # this imports marc records as works into the neo4j db
 class DocumentImporter
@@ -65,13 +66,27 @@ class DocumentImporter
       
       
       
-      work.items << Item.create!(:uri => "http://catalog.wmu.se/cgi-bin/koha/opac-detail.pl?biblionumber=#{biblio}", :disseminator => "KOHA")
+      work.items << Item.create!(:uri => "http://catalog.wmu.se/cgi-bin/koha/opac-detail.pl?biblionumber=#{biblio}", :item_type => "KOHA")
 
       record.fields('856').each do |e56|
         url = e56["u"]
-        work.items << Item.create!(:uri => url, :disseminator => "PDF")
-        # content = get_content(url)
-        #work.content = content unless content.nil? 
+        
+        if url.include?("s3-eu-west-1.amazonaws.com")
+          # http://s3-eu-west-1.amazonaws.com/wmu-library-content/Dissertations/U-Wje8mmUr3O-tUXaEApZw/Herbert%20Christian.pdf
+          url = url.gsub("http://s3-eu-west-1.amazonaws.com/wmu-library-content/", '')
+          file = File.join('/Users/chrisfitzpatrick/Documents/wmu_online', url)
+          pdf = Dir.glob(File.join(File.dirname(file), '*.pdf') ).first
+          
+          item = Item.create( :item_type => "PDF")
+          item.attachment = File.new(pdf)
+          work.items << item
+          item.save
+        
+          # content = get_content(url)
+          #work.content = content unless content.nil? 
+        end
+        
+        
         
       end
 

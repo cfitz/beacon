@@ -20,18 +20,34 @@
   %body
     .navbar.navbar-fixed-top
       .navbar-inner
-        .container-fluid
+        .container
           %a.btn.btn-navbar(data-target=".nav-collapse" data-toggle="collapse")
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.brand(href="#") Beacon
-          .container.nav-collapse
+          %h3
+            %a.brand(href="/")
+              %i.icon-globe
+              Beacon
+          .nav-collapse
             %ul.nav
               %li= link_to "Documents", "/documents"
               %li= link_to "People", "/people"
-              %li= link_to "Topics", "/topics"
-
+              %li.dropdown 
+                = link_to "#", :class => "dropdown-toggle", "data-toggle" => 'dropdown'   do
+                  Topics
+                  %b.caret
+                %ul.dropdown-menu
+                  %li= link_to "All Topics", topics_path
+                  %li= link_to "Concepts", concepts_path
+                  %li= link_to "Places", places_path
+                  %li= link_to "Things", things_path
+            = form_tag('/search', :method => :get, :remote => false, :class => "navbar-search pull-left", :autocomplete => 'off') do
+              = text_field_tag(:search, params[:search], :class => "search-query span2", :placeholder => "Search")
+            %ul.nav.pull-right#login
+         
+              
+              = user_signed_in? ? render_sign_out : render_sign_in
     .container-fluid
 
       .row-fluid
@@ -43,10 +59,13 @@
               %li= link_to "Another Dummy ", "/path2"
               %li= link_to "A Third Dummy", "/path3"
         .span9
-          = yield
+          = content_for?(:content) ? yield(:content) : yield
     
-      %footer
-        %p &copy; Company 2012
+      %footer.footer
+        %p
+          %a{:href => "http://wmu.se"} The World Maritime University
+          %br 
+          Malmö, Sweden.
     /
       Javascripts
       \==================================================

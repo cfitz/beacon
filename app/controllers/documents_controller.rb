@@ -1,4 +1,9 @@
 class DocumentsController < ApplicationController
+  
+  include AuthenticationHelper
+  before_filter :enforce_logged_in, :except => [:show, :index]
+  
+  
   # GET /documents
   # GET /documents.json
   def index

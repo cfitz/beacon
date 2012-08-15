@@ -1,4 +1,10 @@
 class Person < Neo4j::Rails::Model
+  
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
+  
+  index :id
+  
   property :name, :type => String, :index => :fulltext
   property :title, :type => String, :index => :exact
 

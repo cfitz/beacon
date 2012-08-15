@@ -1,44 +1,14 @@
-= form_for @user, :html => { :class => 'form-horizontal' } do |f|
-  .control-group
-    = f.label :email, :class => 'control-label'
-    .controls
-      = f.text_field :email, :class => 'text_field'
-  .control-group
-    = f.label :encrypted_password, :class => 'control-label'
-    .controls
-      = f.text_field :encrypted_password, :class => 'text_field'
-  .control-group
-    = f.label :remember_created_at, :class => 'control-label'
-    .controls
-      = f.text_field :remember_created_at, :class => 'text_field'
-  .control-group
-    = f.label :reset_password_token, :class => 'control-label'
-    .controls
-      = f.text_field :reset_password_token, :class => 'text_field'
-  .control-group
-    = f.label :reset_password_sent_at, :class => 'control-label'
-    .controls
-      = f.text_field :reset_password_sent_at, :class => 'text_field'
-  .control-group
-    = f.label :sign_in_count, :class => 'control-label'
-    .controls
-      = f.text_field :sign_in_count, :class => 'text_field'
-  .control-group
-    = f.label :current_sign_in_at, :class => 'control-label'
-    .controls
-      = f.text_field :current_sign_in_at, :class => 'text_field'
-  .control-group
-    = f.label :last_sign_in_at, :class => 'control-label'
-    .controls
-      = f.text_field :last_sign_in_at, :class => 'text_field'
-  .control-group
-    = f.label :current_sign_in_ip, :class => 'control-label'
-    .controls
-      = f.text_field :current_sign_in_ip, :class => 'text_field'
-  .control-group
-    = f.label :last_sign_in_ip, :class => 'control-label'
-    .controls
-      = f.text_field :last_sign_in_ip, :class => 'text_field'
+= simple_form_for @user, :html => { :class => 'form-horizontal' } do |f|
+  = f.input :email
+  = f.input :encrypted_password
+  = f.input :remember_created_at
+  = f.input :reset_password_token
+  = f.input :reset_password_sent_at
+  = f.input :sign_in_count
+  = f.input :current_sign_in_at
+  = f.input :last_sign_in_at
+  = f.input :current_sign_in_ip
+  = f.input :last_sign_in_ip
   .form-actions
-    = f.submit nil, :class => 'btn btn-primary'
+    = f.button :submit, :class => 'btn-primary'
     = link_to t('.cancel', :default => t("helpers.links.cancel")), users_path, :class => 'btn'

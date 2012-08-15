@@ -1,0 +1,14 @@
+.page-header
+  %h1=t '.title', :default => "Search Results"
+%table.table.table-striped
+  %thead
+    %tr
+      %th= "Name"
+      %th= "Type"
+  %tbody
+    - @search.results.each do |result|
+      %tr
+        %td= link_to result.name, result
+        %td= result.class
+        
+= page_navigation_links @search

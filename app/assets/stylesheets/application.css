@@ -11,5 +11,127 @@
  *= require_self
  *= require bootstrap-wysihtml5
  *= require bootstrap-datepicker
+ *= require Hypertree
+ *= require infoviz-base
  *= require_tree .
 */
+
+/* Tweak navbar brand link to be super sleek
+-------------------------------------------------- */
+
+.navbar a.brand {
+ font-family: Sarina, Arial, Helvetica, sans-serif;
+ color: white;
+}
+
+.navbar ul#login {
+  width: 20%;
+  
+}
+
+
+i.icon-beacon {
+    background-image: url("beacon.png");
+    background-position: center center;
+}
+
+
+
+.page-header h1 {
+  text-align: left;
+}
+
+.page-header h1 a {
+  float: right;
+  color: white;
+}
+
+.page-header h1 a:hover { color: #666; }
+
+
+.table .dl-horizontal dt {  width: 65px; }
+
+.table .dl-horizontal dd { margin-left: 70px; }
+
+.dl-horizontal dd {
+  text-align: left;
+
+  min-height: 18px;
+ 
+}
+
+.dl-horizontal dd ul {
+  list-style: none;
+  margin: 0;
+}
+
+table.table { 
+  margin-left: 0;
+  
+  }
+
+
+div.title-container {
+   float: left; 
+}
+
+div.span12.document-fields {
+  margin-left: 0;
+}
+
+.table a.title_link {
+  color: #2E4F81;
+  text-decoration: none;
+}
+
+.table a:hover {
+  text-decoration: underline;
+  background-color: transparent;
+  color: #08C;
+}
+
+
+em.date { float: right}
+
+
+
+.footer {
+  margin-top: 45px;
+  padding: 35px 0 36px;
+  border-top: 1px solid #E5E5E5;
+  text-align: left;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.footer p {
+  margin-bottom: 0;
+  color: #555;
+}
+
+
+
+/* front page for graph */
+#center-container {
+  background-color: #1A1A1A;
+  color: #CCC;
+  min-height: 400px;
+}
+
+
+#infovis {
+ height: 100%; 
+ width: 100%;
+ margin: auto;
+ overflow: hidden;
+ font-size: 30em;
+}
+
+#infovis i {
+  vertical-align:middle;
+}
+
+#infovis-canvaswidget {
+  margin:25px 0 0 25px;
+}

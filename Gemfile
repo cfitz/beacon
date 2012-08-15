@@ -6,9 +6,11 @@ gem 'rails', '3.2.3'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'neo4j', :git => "git://github.com/andreasronge/neo4j.git"
+gem 'neo4j-core', :git => 'git://github.com/andreasronge/neo4j-core.git'
 
 gem 'devise', "2.0.4"
 gem 'devise-neo4j', :path =>  "/Users/chrisfitzpatrick/code/devise-neo4j"
+gem 'omniauth-google-oauth2'
 gem "paperclip", '2.3.16'
 gem "neo4jrb-paperclip", :require => "neo4jrb_paperclip"
 gem "aws-s3",            :require => "aws/s3"
@@ -23,13 +25,19 @@ gem 'simple_form'
 gem "nested_form"
 gem 'bootstrap-wysihtml5-rails'
 gem 'bootstrap-datepicker-rails'
+gem 'childprocess', '0.3.4'
+gem 'therubyrhino_jar', '1.7.3'
+gem 'uglifier', '1.2.6'
+gem 'ffi', '1.1.3'
+gem 'ffi-ncurses'
 
 group :test, :development do
-   gem "factory_girl_rails"
+   gem "factory_girl_rails", '3.6.0'
    gem 'steak'
    gem 'rspec-rails'
    gem 'rcov', '~> 0.9.11'
    gem 'neo4j-admin'
+   gem 'capistrano'
 end
 
 
@@ -47,7 +55,7 @@ group :assets do
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyrhino'
 
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier', '1.2.6'
 end
 
 gem 'jquery-rails'

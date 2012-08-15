@@ -26,6 +26,7 @@
     this.options = $.extend({}, $.fn.typeahead.defaults, options)
     this.matcher = this.options.matcher || this.matcher
     this.sorter = this.options.sorter || this.sorter
+    this.autoSelect = typeof this.options.autoSelect == 'boolean' ? this.options.autoSelect : true
     this.highlighter = this.options.highlighter || this.highlighter
     this.$menu = $(this.options.menu).appendTo('body')
     this.source = this.options.source
@@ -40,14 +41,22 @@
     constructor: Typeahead
 
   , select: function () {
-      var val = JSON.parse(this.$menu.find('.active').attr('data-value'))
-        , text
+      
+      var selected = this.$menu.find('.active').attr('data-value')
+      
+      if (selected) { 
+        var val = JSON.parse(selected)
+      } else {
+       return this.$element.closest("form").submit();
+      }
 
       if (!this.strings) text = val[this.options.property]
       else text = val
 
-      this.$element.val(text)
-
+      if(this.autoSelect || val){
+        this.$element.val(text)
+      }
+    
       if (typeof this.onselect == "function")
           this.onselect(val)
 
@@ -159,8 +168,9 @@
         i.find('a').html(that.highlighter(item))
         return i[0]
       })
-
-      items.first().addClass('active')
+      if (this.autoSelect) {
+        items.first().addClass('active')
+      }
       this.$menu.html(items)
       return this
     }
