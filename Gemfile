@@ -8,7 +8,7 @@ gem 'rails', '3.2.3'
 
 gem 'neo4j', :git => "git://github.com/andreasronge/neo4j.git"
 gem 'neo4j-core', :git => 'git://github.com/andreasronge/neo4j-core.git'
-
+ gem "torquebox-rake-support"
 gem 'devise', "2.0.4"
 gem 'devise-neo4j', :git => "git@github.com:cfitz/devise-neo4j.git"
 gem 'omniauth-google-oauth2'
@@ -34,8 +34,8 @@ gem 'ffi-ncurses'
 
 group :test, :development do
   
-   gem "torquebox-rake-support"
-   gem "torquebox"
+   gem 'torquebox', '2.1.0'
+  
    gem "factory_girl_rails", '3.6.0'
    gem 'steak'
    gem 'rspec-rails'
@@ -50,7 +50,8 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'twitter-bootstrap-rails', :git => "git://github.com/seyhunak/twitter-bootstrap-rails.git", :branch => "static"
+  gem 'twitter-bootstrap-rails', :git => "git://github.com/seyhunak/twitter-bootstrap-rails.git"
+  #, :branch => "static"
 	
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
