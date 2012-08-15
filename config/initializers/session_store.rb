@@ -1,8 +1,8 @@
-# Be sure to restart your server when you modify this file.
-
-Beacon::Application.config.session_store :cookie_store, key: '_beacon_session'
-
-# Use the database for sessions instead of the cookie-based default,
-# which shouldn't be used to store highly confidential information
-# (create the session table with "rails generate session_migration")
-# Beacon::Application.config.session_store :active_record_store
+# Configure the TorqueBox Servlet-based session store.
+# Provides for server-based, in-memory, cluster-compatible sessions
+Beacon::Application.config.session_store :torquebox_store
+if ENV['TORQUEBOX_APP_NAME']
+  Beacon::Application.config.session_store :torquebox_store
+else
+  Beacon::Application.config.session_store :cookie_store, :key => '_CHANGEME_session'
+end  
