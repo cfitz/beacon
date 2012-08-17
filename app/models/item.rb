@@ -2,7 +2,7 @@ class Item < Neo4j::Rails::Model
   include Tire::Model::Search
   include Tire::Model::Callbacks
   include Neo4jrb::Paperclip
-   index :id
+  index :id
    
   before_save { |record| record.uri = record.attachment.url if record.uri.blank?  }
    
@@ -25,7 +25,7 @@ class Item < Neo4j::Rails::Model
 
   
   def name
-    self.format.empty? ? "View Document" : self.format
+    self.item_type.empty? ? "View Document" : self.item_type
   end
 
   def _destroy

@@ -50,8 +50,9 @@
        return this.$element.closest("form").submit();
       }
 
-      if (!this.strings) text = val[this.options.property]
-      else text = val
+      if (!this.strings) { 
+        var text = val[this.options.property] } 
+      else { var text = val }
 
       if(this.autoSelect || val){
         this.$element.val(text)
