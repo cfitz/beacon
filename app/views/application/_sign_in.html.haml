@@ -1,0 +1,10 @@
+%li#signin{ :class => 'pull-right' } #{link_to(  "Log In", new_user_session_path  ) } 
+
+-# For right now, lets just direct people to a sign-in page, where we example the registration process. 
+  %li#signin{ :class=> 'dropdown pull-right' } 
+    %a{ :href=>'#', :class => 'dropdown-toggle', :data => { :toggle => 'dropdown'} }
+      Sign In
+      %b{ :class=>'caret'}
+    %ul{ :class=>'dropdown-menu'} 
+      %li #{link_to 'with Google', user_omniauth_authorize_path(:google_oauth2)}
+      %li #{ link_to 'with Beacon', new_user_session_path}

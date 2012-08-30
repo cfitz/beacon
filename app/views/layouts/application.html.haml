@@ -45,22 +45,12 @@
             = form_tag('/search', :method => :get, :remote => false, :class => "navbar-search pull-left", :autocomplete => 'off') do
               = text_field_tag(:search, params[:search], :class => "search-query span2", :placeholder => "Search")
             %ul.nav.pull-right#login
-         
-              
-              = user_signed_in? ? render_sign_out : render_sign_in
+              = render "sign_out" if user_signed_in?
+              = render "sign_in" if !user_signed_in?
     .container-fluid
-
-      .row-fluid
-        .span3
-          .well.sidebar-nav
-            %ul.nav.nav-list
-              %li.nav-header Facets
-              %li= link_to "A Dummy", "/path1"
-              %li= link_to "Another Dummy ", "/path2"
-              %li= link_to "A Third Dummy", "/path3"
-        .span9
-          = content_for?(:content) ? yield(:content) : yield
-    
+      = render "row_with_facets" if @facets
+      = render "row_no_facets" if !@facets
+      
       %footer.footer
         %p
           %a{:href => "http://wmu.se"} The World Maritime University

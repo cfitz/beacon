@@ -1,14 +1,16 @@
+require 'neo4j-will_paginate'
 class DocumentsController < ApplicationController
   
   include AuthenticationHelper
   before_filter :enforce_logged_in, :except => [:show, :index]
   
-  
   # GET /documents
   # GET /documents.json
   def index
-    @documents = Document.all.paginate(:page => params[:page], :per_page => 10 )
-
+  
+    @documents = Document.elastic_search params 
+    @facets = @documents.facets
+   
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @documents }

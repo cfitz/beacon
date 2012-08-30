@@ -37,6 +37,7 @@ describe CorporateBodiesController do
   describe "GET index" do
     it "assigns all corporate_bodies as @corporate_bodies" do
       corporate_body = CorporateBody.create! valid_attributes
+      CorporateBody.stub(:all).and_return([corporate_body])
       get :index, {}, valid_session
       assigns(:corporate_bodies).should eq([corporate_body])
     end

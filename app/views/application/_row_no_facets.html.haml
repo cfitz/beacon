@@ -1,0 +1,3 @@
+.span12
+  =render :partial => "shared/flash_messages", :locals => {:flash => flash}
+  = content_for?(:content) ? yield(:content) : yield

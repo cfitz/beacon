@@ -3,6 +3,6 @@
 FactoryGirl.define do
   factory :item do
     uri "MyURI"
-    format "MyFormat"
+    item_type "MyFormat"
   end
 end

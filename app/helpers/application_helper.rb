@@ -34,27 +34,69 @@ module ApplicationHelper
     item.disseminator == "KOHA" ? 'icon-book' : 'icon-file'
   end
   
-
+  # makes twitter flash messages look right
+  # app/helpers/application_helper.rb
+  def twitterized_type(type)
+    case type
+      when :alert
+        "alert-block"
+      when :error
+        "alert-error"
+      when :notice
+        "alert-info"
+      when :success
+        "alert-success"
+      else
+        type.to_s
+    end
+  end  
   
-  def render_sign_in
-    result = "<li class='dropdown pull-right' id='signin'>"
-    result << "<a href='#' class = 'dropdown-toggle' data-toggle ='dropdown'>Sign In
-      <b class='caret'></b></a>"
-    result << "<ul class='dropdown-menu'><li>#{link_to 'with Google', user_omniauth_authorize_path(:google_oauth2)}</li><li>#{ link_to 'with Beacon', new_user_session_path}</li></ul>"
-    result << "</li>"
-    result.html_safe
+  # rails helpers seem to keep url encoding square bra
+  
+  
+  
+  # returns li's for the facets
+  def facet_list(facet_label, facet_values)
+    facets = ""
+    facets << content_tag(:li, facet_label, :class => "nav-header")
+    facet_values["terms"].each do |f|
+      facet_term = "#{facet_label}:#{f['term']}"
+      params_facet = params[:facet] ? params[:facet] : []
+      if params_facet.include?(facet_term)
+         facets << remove_facet_li(facet_term, f["count"])
+      else 
+         facets << add_facet_li(facet_term, f["count"])
+      end
+    end
+    facets.html_safe
   end
   
-  def render_sign_out
-    result = "<li class='dropdown pull-right' id='signout'>"
-    result << "<a href='#' class='dropdown-toggle' data-toggle ='dropdown'>My Account
-    <b class='caret'></b>
-    </a>"
-    result << "<ul class='dropdown-menu'><li>#{ link_to('Sign Out', destroy_user_session_path, :method => :delete) }</li></ul>"
-    result << "</li>"
-    result.html_safe
+  # this adds a li to remove the facet from the query
+  def remove_facet_li(facet_term, facet_count)
+    
+    facets = params[:facet].clone
+    facets.delete(facet_term)
+    new_params =  { :controller => params[:controller], :action => params[:action], :facet => facets }
+    new_params[:query] = params[:query] if params[:query]  
+    
+    return content_tag(:li, :class => "remove_facet active") {  link_to( "#{facet_term.split(":").last}:#{facet_count}", new_params )  }
+    
   end
- 
+  
+  def add_facet_li(facet_term, facet_count)
+    facets = params[:facet] ? params[:facet].clone : []
+    facets << facet_term
+    new_params =  { :controller => params[:controller], :action => params[:action], :facet => facets }
+    new_params[:query] = params[:query] if params[:query]
+    
+    return content_tag(:li) do
+        link_to( "#{facet_term.split(":").last}", new_params ) +
+          content_tag(:span, facet_count, :class => "badge badge-warning")
+    end
+    
+  end
+  
+    
   #takes a date an makes sure it doesn't look stupid
   def pretty_date(date)
     dt = DateTime.parse(date)
@@ -76,8 +118,6 @@ module ApplicationHelper
       results.html_safe
     end
   end
-    
- 
- 
+   
  
 end

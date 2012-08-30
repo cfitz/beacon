@@ -19,7 +19,7 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe DocumentsController do
-
+  logout_user
   # This should return the minimal set of attributes required to create a valid
   # Document. As you add validations to Document, be sure to
   # update the return value of this method accordingly.
@@ -27,61 +27,60 @@ describe DocumentsController do
     {}
   end
 
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # DocumentsController. Be sure to keep this updated too.
-  def valid_session
-    {}
-  end
 
   describe "GET index" do
     it "assigns all documents as @documents" do
       document = Document.create! valid_attributes
       Document.stub(:all).and_return([document])
-      get :index, {}, valid_session
+      get :index
       assigns(:documents).should eq([document])
     end
   end
 
+
   describe "GET show" do
     it "assigns the requested document as @document" do
       document = Document.create! valid_attributes
-      get :show, {:id => document.to_param}, valid_session
+      get :show, {:id => document.to_param}
       assigns(:document).should eq(document)
     end
   end
 
   describe "GET new" do
+    login_admin
     it "assigns a new document as @document" do
-      get :new, {}, valid_session
+      document = Document.create! valid_attributes
+      get :new
       assigns(:document).should be_a_new(Document)
     end
   end
 
   describe "GET edit" do
+    login_admin
     it "assigns the requested document as @document" do
       document = Document.create! valid_attributes
-      get :edit, {:id => document.to_param}, valid_session
+      get :edit, {:id => document.to_param}
       assigns(:document).should eq(document)
     end
   end
 
   describe "POST create" do
+    login_admin
     describe "with valid params" do
       it "creates a new Document" do
         expect {
-          post :create, {:document => valid_attributes}, valid_session
+          post :create, {:document => valid_attributes}
         }.to change(Document, :count).by(1)
       end
 
       it "assigns a newly created document as @document" do
-        post :create, {:document => valid_attributes}, valid_session
+        post :create, {:document => valid_attributes}
         assigns(:document).should be_a(Document)
         assigns(:document).should be_persisted
       end
 
       it "redirects to the created document" do
-        post :create, {:document => valid_attributes}, valid_session
+        post :create, {:document => valid_attributes}
         response.should redirect_to(Document.last)
       end
     end
@@ -90,14 +89,14 @@ describe DocumentsController do
       it "assigns a newly created but unsaved document as @document" do
         # Trigger the behavior that occurs when invalid params are submitted
         Document.any_instance.stub(:save).and_return(false)
-        post :create, {:document => {}}, valid_session
+        post :create, {:document => {}}
         assigns(:document).should be_a_new(Document)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Document.any_instance.stub(:save).and_return(false)
-        post :create, {:document => {}}, valid_session
+        post :create, {:document => {}}
         response.should render_template("new")
       end
     end
@@ -105,6 +104,7 @@ describe DocumentsController do
 
   describe "PUT update" do
     describe "with valid params" do
+      login_admin
       it "updates the requested document" do
         document = Document.create! valid_attributes
         # Assuming there are no other documents in the database, this
@@ -112,28 +112,29 @@ describe DocumentsController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         Document.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, {:id => document.to_param, :document => {'these' => 'params'}}, valid_session
+        put :update, {:id => document.to_param, :document => {'these' => 'params'}}
       end
 
       it "assigns the requested document as @document" do
         document = Document.create! valid_attributes
-        put :update, {:id => document.to_param, :document => valid_attributes}, valid_session
+        put :update, {:id => document.to_param, :document => valid_attributes}
         assigns(:document).should eq(document)
       end
 
       it "redirects to the document" do
         document = Document.create! valid_attributes
-        put :update, {:id => document.to_param, :document => valid_attributes}, valid_session
+        put :update, {:id => document.to_param, :document => valid_attributes}
         response.should redirect_to(document)
       end
     end
 
     describe "with invalid params" do
+      login_admin
       it "assigns the document as @document" do
         document = Document.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Document.any_instance.stub(:save).and_return(false)
-        put :update, {:id => document.to_param, :document => {}}, valid_session
+        put :update, {:id => document.to_param, :document => {}}
         assigns(:document).should eq(document)
       end
 
@@ -141,23 +142,24 @@ describe DocumentsController do
         document = Document.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Document.any_instance.stub(:save).and_return(false)
-        put :update, {:id => document.to_param, :document => {}}, valid_session
+        put :update, {:id => document.to_param, :document => {}}
         response.should render_template("edit")
       end
     end
   end
 
   describe "DELETE destroy" do
+    login_admin
     it "destroys the requested document" do
       document = Document.create! valid_attributes
       expect {
-        delete :destroy, {:id => document.to_param}, valid_session
+        delete :destroy, {:id => document.to_param}
       }.to change(Document, :count).by(-1)
     end
 
     it "redirects to the documents list" do
       document = Document.create! valid_attributes
-      delete :destroy, {:id => document.to_param}, valid_session
+      delete :destroy, {:id => document.to_param}
       response.should redirect_to(documents_url)
     end
   end

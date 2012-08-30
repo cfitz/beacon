@@ -3,6 +3,7 @@ class Document < Neo4j::Rails::Model
   include Tire::Model::Search
   include Tire::Model::Callbacks
   include Neo4jrb::Paperclip
+  include BeaconSearch
   
   index :id
   
@@ -25,11 +26,43 @@ class Document < Neo4j::Rails::Model
   has_n(:sections).from(:Section)
   has_n(:annotations).from(:Annotation)
   
-  has_n(:topics)
+  has_n(:topics).from(:Topic)
   
   accepts_nested_attributes_for :creators, :allow_destroy_relationship => true, :reject_if => proc { |attributes| attributes['id'].blank? && attributes['name'].blank? }
   accepts_nested_attributes_for :items
   
+  def self.facets
+      [ :format ]
+  end
+
+ 
+  mapping do
+      indexes :topics, :type => 'string'
+      indexes :topic_facets, :type => 'string', :index => :not_analyzed
+  end
+
+  
+  # this configures how tire indexs into Elastic Search
+  def to_indexed_json
+         json = {
+            :title   => title,
+            :summary => summary,
+            :topic_facets => topics.collect { |t| t.name },
+            :creators => creators.collect { |c| c.name },
+            :topics => topics.collect { |t| t.name },
+            :format => items.collect { |i| i.item_type },
+            :items => items.collect { |i| i.url }
+          }
+          json[:date] = date if date
+          json.to_json
+  end
+  
+  
+
+  
+  
+  
+  # this is a fix for rails that allows us to destroy relationships without destroying the item.
    def update_nested_attributes(rel_type, attr, options)
       allow_destroy, allow_destroy_relationship, reject_if = [options[:allow_destroy], options[:allow_destroy_relationship], options[:reject_if]] if options
       begin
@@ -69,6 +102,11 @@ class Document < Neo4j::Rails::Model
     self.title
   end
   
+  def available_formats
+    formats = self.items.collect {|i| i.item_type }
+    return formats.compact!
+  end
+  
   
   def prepare!
       self.uuid ||= SecureRandom.urlsafe_base64
@@ -77,7 +115,5 @@ class Document < Neo4j::Rails::Model
       self
   end
 
-  
-  
 
 end

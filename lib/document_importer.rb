@@ -1,5 +1,5 @@
 require 'marc'
-require 'pdf-reader'
+#require 'pdf-reader'
 require 'open-uri'
 
 # this imports marc records as works into the neo4j db
@@ -16,8 +16,10 @@ class DocumentImporter
     end
   end
   
+
+  
   def cleanup(string)
-    return string.strip.chomp.chomp(".").chomp("-").strip.chomp("/").strip
+    return string.gsub('"', "").strip.chomp.chomp(".").chomp("-").strip.chomp("/").strip
   end
   
   def get_content(url)
@@ -37,7 +39,7 @@ class DocumentImporter
       biblio = record["999"]["c"]
 
       subfields = "abfgknps".each_char do |sub|
-        if record["245"][sub]
+        if record["245"] && record["245"][sub]
           title << record["245"][sub] + " "
         end
       end
@@ -45,7 +47,7 @@ class DocumentImporter
       
       if record["260"] && record['260']['c']
           date = Date.new(record["260"]["c"].match(/(19|20)\d\d/).to_s.to_i)
-      elsif record['090']['a']
+      elsif record['090'] && record["090"]['a']
           date = Date.new(record['090']['a'].match(/(19|20)\d\d/).to_s.to_i)
       end 
 
@@ -59,8 +61,13 @@ class DocumentImporter
 
       record.fields("100").each do |onehund|
         if onehund["a"]
-          puts onehund['a'].chomp(".").titleize 
-          work.creators << Person.find_or_create_by!(:name => onehund['a'].chomp(".").titleize )
+          name =  cleanup(onehund['a'].chomp(".").titleize) 
+          p = Person.find(:name => name, :index => :fulltext)
+          if p
+            work.creators << p
+          else
+            work.creators << Person.create(:name => name )
+          end
         end
       end
       
@@ -68,6 +75,7 @@ class DocumentImporter
       
       work.items << Item.create!(:uri => "http://catalog.wmu.se/cgi-bin/koha/opac-detail.pl?biblionumber=#{biblio}", :item_type => "KOHA")
 
+=begin
       record.fields('856').each do |e56|
         url = e56["u"]
         
@@ -80,29 +88,42 @@ class DocumentImporter
           item = Item.create( :item_type => "PDF")
           item.attachment = File.new(pdf)
           work.items << item
+          work.save
           item.save
         
           # content = get_content(url)
           #work.content = content unless content.nil? 
-        end
-        
-        
-        
+        end        
       end
-
+=end
+      
+     
+      
       record.fields("650").each do |six50|
-         puts six50
-         if six50["a"]   
-            work.topics << Concept.find_or_create_by!(:name => cleanup( six50["a"]) )
+         terms = []
+       
+         if six50["a"]
+            terms << Concept.find_or_create_by!(:name => cleanup( six50["a"]) ) 
          end
          if six50["x"]
-           work.topics << Concept.find_or_create_by!(:name => cleanup(six50["x"]) )
-         end
+            terms << Concept.find_or_create_by!(:name => cleanup( six50["x"]) ) 
+         end     
+
          if six50["z"]
-           work.topics << Place.find_or_create_by!(:name => cleanup(six50["z"]) )
+           terms << Place.find_or_create_by!(:name => cleanup( six50["z"]) )
          end
-
-
+         
+          term = terms.collect{|t| t.name}.join(" ")
+         
+          topic = Topic.find_or_create_by!(:name => term )
+         
+          terms.each do |t|
+           topic.terms << t
+          end
+          topic.save
+          work.topics << topic
+         
+         
       end
 
       work.save 

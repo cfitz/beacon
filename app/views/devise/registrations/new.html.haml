@@ -1,0 +1,11 @@
+= simple_form_for(resource, :as => resource_name, :html => { :class => 'form-horizontal' }, :url => registration_path(resource_name)) do |f| 
+  = devise_error_messages! 
+  %section#user-info
+    .hero-unit    
+      %div{:class=>"control-group string required"}
+        %h1 Request An Account
+        %p Please leave your email below. We will contact you shortly! Thanks
+        .controls
+          = f.email_field :email, :input_html => { :class => "span6" },:placeholder => 'user@domain.com',  :hint => "add your article title here"
+
+    %div= f.submit "Sign up"

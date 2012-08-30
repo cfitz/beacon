@@ -37,6 +37,7 @@ describe EventsController do
   describe "GET index" do
     it "assigns all events as @events" do
       event = Event.create! valid_attributes
+      Event.stub(:all).and_return([event])
       get :index, {}, valid_session
       assigns(:events).should eq([event])
     end

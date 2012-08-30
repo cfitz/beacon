@@ -5,9 +5,7 @@ class UsersController < ApplicationController
   
   def show
      @user = User.find(params[:id])
-   end
-
-
+  end
 
   def index
     if params[:approved] == "false"
@@ -18,9 +16,21 @@ class UsersController < ApplicationController
   end
   
   def edit
-     @user = User.find_by_id(params[:id])
-     @koha_user_data = @user.koha_data
+     @user = User.find(params[:id])
   end
+
+  # DELETE /documents/1
+  # DELETE /documents/1.json
+  def destroy
+    @user = User.find(params[:id])
+    @user.destroy
+
+    respond_to do |format|
+      format.html { redirect_to users_url }
+      format.json { head :no_content }
+    end
+  end
+
   
   def update
     @user = User.find(params[:id])

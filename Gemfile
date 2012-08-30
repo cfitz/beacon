@@ -8,7 +8,7 @@ gem 'rails', '3.2.3'
 
 gem 'neo4j', :git => "git://github.com/andreasronge/neo4j.git"
 gem 'neo4j-core', :git => 'git://github.com/andreasronge/neo4j-core.git'
- gem "torquebox-rake-support"
+gem "torquebox-rake-support"
 gem 'devise', "2.0.4"
 gem 'devise-neo4j', :git => "git@github.com:cfitz/devise-neo4j.git"
 gem 'omniauth-google-oauth2'
@@ -21,30 +21,33 @@ gem "haml-rails"
 gem 'tire'
 gem 'neo4j-will_paginate', :git => 'git://github.com/andreasronge/neo4j-will_paginate.git'
 gem 'will_paginate'
-gem 'pdf-reader'
 gem 'simple_form'
 gem "nested_form"
 gem 'bootstrap-wysihtml5-rails'
 gem 'bootstrap-datepicker-rails'
-gem 'childprocess', '0.3.4'
-gem 'therubyrhino_jar', '1.7.3'
-gem 'uglifier', '1.2.6'
-gem 'ffi', '1.1.3'
-gem 'ffi-ncurses'
 
 group :test, :development do
-  
+#  gem 'neo4j-admin', :git => "git://github.com/andreasronge/neo4j-admin.git"
    gem 'torquebox', '2.1.0'
-  
-   gem "factory_girl_rails", '3.6.0'
-   gem 'steak'
-   gem 'rspec-rails'
-   gem 'rcov', '~> 0.9.11'
-   gem 'neo4j-admin'
-   gem 'capistrano'
+   gem 'rspec-rails','2.11.0'
+   gem 'guard-rspec','0.5.5'
+   gem 'autotest-rails'
+   gem 'autotest-fsevent'
+   gem 'autotest-growl'
 end
 
-
+group :test do
+  gem 'simplecov', :require => false
+	gem 'capybara','1.1.2'
+	gem 'factory_girl_rails', '~> 3.5.0', require: false
+	gem 'cucumber-rails','1.2.1', require: false
+	gem 'database_cleaner', '0.7.0'
+	gem 'guard-spork', '0.3.2'
+	gem 'spork', '0.9.0'
+	gem 'launchy', '2.1.0'
+	gem 'rb-fsevent', '0.9.1', :require => false
+ 	gem 'growl', '1.0.3'
+end
 
 
 # Gems used only for assets and not required

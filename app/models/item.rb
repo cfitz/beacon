@@ -22,7 +22,10 @@ class Item < Neo4j::Rails::Model
   has_one(:document).from(Document, :items)
   has_neo4jrb_attached_file :attachment
   
-
+  
+  def url
+   self.attachment.exists? ? self.attachment.url : self.uri
+  end
   
   def name
     self.item_type.empty? ? "View Document" : self.item_type

@@ -4,12 +4,14 @@ module DocumentsHelper
     Nokogiri::XML(input.to_s).root.attributes["value"]
   end
   
-  # this takes an item and makes the proper li for it.
+  # this takes an item and makes the proper li for it. this is ugly as hell. 
   def render_list_item(item)
-    if item.item_type == 'KOHA'
-      "<li><a href='#{item.uri}'><i class='icon-book'></i><b>Koha Record</b></a></li>"
-    elsif item.item_type == "PDF"
-      "<li><a href='#{item.attachment.url}'><i class='icon-file'></i><b>PDF</b></a></li>"
+    if item.url.include?("catalog.wmu")
+      "<li><a href='#{item}'><i class='icon-book'></i><b>Koha Record</b></a></li>"
+    elsif item.url.include?("pdf")
+      "<li><a href='#{item}'><i class='icon-file'></i><b>PDF</b></a></li>"
+    elsif !item.url.include?("missing") # paperclip has a url of 'missing.pgn' if there isn't an attachment
+      "<li><a href='#{item}'><i class='icon-file'></i><b>External Link</b></a></li>"
     else
       ""
     end    
@@ -17,7 +19,7 @@ module DocumentsHelper
   
   # this takes an items ennumerable and returns a ol of the items.
   def item_list(items, list = "ul", node_class = 'items_list')
-    unless items.first.nil?
+    unless items.nil?
       node_class ? node_class = "class='#{node_class}'" : node_class = '' 
       results = "<#{list} #{node_class}>"
       items.each { |i| results << render_list_item(i) }
