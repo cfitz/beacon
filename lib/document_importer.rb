@@ -75,7 +75,7 @@ class DocumentImporter
       
       work.items << Item.create!(:uri => "http://catalog.wmu.se/cgi-bin/koha/opac-detail.pl?biblionumber=#{biblio}", :item_type => "KOHA")
 
-=begin
+
       record.fields('856').each do |e56|
         url = e56["u"]
         
@@ -95,7 +95,7 @@ class DocumentImporter
           #work.content = content unless content.nil? 
         end        
       end
-=end
+
       
      
       

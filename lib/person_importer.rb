@@ -26,12 +26,14 @@ class PersonImporter
       p = p.first
       
       
-      if p.nil?
+      if p.nil?      
+        
         title = name.split(" ").pop
         name.delete!(title).strip!
         name = name.titleize
         p = Person.create!(:name => name, :title => title)
-     
+     end
+      
         program = CorporateBody.find_or_create_by!(:name => program_name )
         program.is_part_of << @wmu
         puts p.name
@@ -39,7 +41,7 @@ class PersonImporter
         p.has_membership_rels.first.member_type = "World Maritime University Alumni"
       
         p.save
-      end
+      
         
         
         
