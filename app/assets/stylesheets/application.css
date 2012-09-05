@@ -12,7 +12,10 @@
  *= require bootstrap-wysihtml5
  *= require bootstrap-datepicker
  *= require Hypertree
- *= require infoviz-base
+ * require infoviz-base
+ *= require document-viewer/viewer-datauri
+ *= require document-viewer/plain-datauri
+ *= require document-viewer/plain
  *= require_tree .
 */
 
@@ -121,16 +124,15 @@ em.date { float: right}
 
 
 #infovis {
- height: 100%; 
- width: 100%;
+ min-height: 400px;
+ width: 35%;
  margin: auto;
  overflow: hidden;
  font-size: 30em;
+padding-top: 75px;
 }
 
-#infovis i {
-  vertical-align:middle;
-}
+#infovis i {  }
 
 #infovis-canvaswidget {
   margin:25px 0 0 25px;

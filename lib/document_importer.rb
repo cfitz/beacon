@@ -34,6 +34,8 @@ class DocumentImporter
   def process
     for record in @marc
       
+     if record.fields('856').first and record.fields('856').first["u"]
+      
       title = ""
       date = ""
       biblio = record["999"]["c"]
@@ -52,8 +54,7 @@ class DocumentImporter
       end 
 
       
-      work = Document.create!(:title => title, :id => biblio ).prepare!
-      
+      work = Document.create!(:title => title, :uuid => biblio ).prepare!
       
       unless date.nil?
         work.date = date
@@ -61,7 +62,8 @@ class DocumentImporter
 
       record.fields("100").each do |onehund|
         if onehund["a"]
-          name =  cleanup(onehund['a'].chomp(".").titleize) 
+          name =  cleanup(onehund['a'].chomp(".").titleize)
+          puts name
           p = Person.find(:name => name, :index => :fulltext)
           if p
             work.creators << p
@@ -72,22 +74,21 @@ class DocumentImporter
       end
       
       
-      
-      work.items << Item.create!(:uri => "http://catalog.wmu.se/cgi-bin/koha/opac-detail.pl?biblionumber=#{biblio}", :item_type => "KOHA")
-
+      work.save
+      item = work.items.create(:uri => "http://catalog.wmu.se/cgi-bin/koha/opac-detail.pl?biblionumber=#{biblio}", :item_type => "KOHA")
+      item.save
 
       record.fields('856').each do |e56|
         url = e56["u"]
         
-        if url.include?("s3-eu-west-1.amazonaws.com")
+        if url.include?("s3-eu-west-1.amazonaws.com") && true == false
           # http://s3-eu-west-1.amazonaws.com/wmu-library-content/Dissertations/U-Wje8mmUr3O-tUXaEApZw/Herbert%20Christian.pdf
           url = url.gsub("http://s3-eu-west-1.amazonaws.com/wmu-library-content/", '')
           file = File.join('/Users/chrisfitzpatrick/Documents/wmu_online', url)
           pdf = Dir.glob(File.join(File.dirname(file), '*.pdf') ).first
           
-          item = Item.create( :item_type => "PDF")
+          item = work.items.create( :item_type => "PDF")
           item.attachment = File.new(pdf)
-          work.items << item
           work.save
           item.save
         
@@ -130,8 +131,8 @@ class DocumentImporter
  
     
     
-    
-    end
-  end
+     end
+    end #for record in marc
+  end # process
   
 end

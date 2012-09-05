@@ -17,6 +17,11 @@
       Creators
     = f.fields_for :creators, Person if !@document.creators.first.nil?       
     = f.link_to_add "Add a creator", :creators
+  %section#topics
+    %h3 
+      Topics
+    = f.fields_for :topics, Topic if !@document.topics.first.nil?
+    = f.link_to_add "Add an topics", :topics
   %section#items
     %h3 
       Items

@@ -22,7 +22,7 @@ module BeaconSearch
            
            self.facets ? defined_facets = self.facets : defined_facets = []
              
-           search = Document.tire.search(:page => page, :per_page => per_page, :load=> true) do
+           search = self.tire.search(:page => page, :per_page => per_page, :load=> true) do
                query do
                  boolean do must { string request_query, :default_operator => "AND" } if request_query end
                  facet_filters.each { |ff| boolean  &ff }
@@ -34,6 +34,8 @@ module BeaconSearch
                 #raise to_json
                 # raise to_curl
           end #tire.search
+          
+          
           
           return search
       

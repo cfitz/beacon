@@ -24,7 +24,7 @@ class DocumentsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @document }
+      format.json { document_access_control }
     end
   end
 
@@ -112,6 +112,15 @@ class DocumentsController < ApplicationController
   
   
   private
+  
+  
+  def document_access_control 
+      if current_user or @document.pdf_item.open_access
+        render json: @document.pdf_item.to_document_json
+      else
+        render json: { :error => "Access Denied"}.to_json
+      end
+  end
  
   
   

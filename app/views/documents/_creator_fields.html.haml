@@ -1,5 +1,5 @@
 .control-group
   = f.label :name, :class => 'control-label'
   .controls
-    = f.text_field :name, :class => 'typeahead', :id => 'creators', :readonly => @document.persisted?
+    = f.text_field :name, :class => 'typeahead creator-typeahead', :readonly => @document.persisted?
     = f.link_to_remove "x"

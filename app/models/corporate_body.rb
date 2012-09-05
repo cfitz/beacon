@@ -6,4 +6,6 @@ class CorporateBody < Neo4j::Rails::Model
   property :name, :type => String, :index => :exact
   has_n(:is_part_of).to(CorporateBody)
   has_n(:members).from(Person, :has_member)
+  has_n(:created_work).to(Document).relationship(Creator)
+
 end

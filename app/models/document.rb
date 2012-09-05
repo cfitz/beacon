@@ -4,6 +4,12 @@ class Document < Neo4j::Rails::Model
   include Tire::Model::Callbacks
   include Neo4jrb::Paperclip
   include BeaconSearch
+
+  before_save :default_values
+
+
+  index_name "#{Tire::Model::Search.index_prefix}documents"
+  
   
   index :id
   
@@ -26,10 +32,13 @@ class Document < Neo4j::Rails::Model
   has_n(:sections).from(:Section)
   has_n(:annotations).from(:Annotation)
   
-  has_n(:topics).from(:Topic)
+  has_n(:topics).to(Topic)
+  
   
   accepts_nested_attributes_for :creators, :allow_destroy_relationship => true, :reject_if => proc { |attributes| attributes['id'].blank? && attributes['name'].blank? }
   accepts_nested_attributes_for :items
+  accepts_nested_attributes_for :topics, :allow_destory_relationship => true
+  
   
   def self.facets
       [ :format ]
@@ -40,6 +49,11 @@ class Document < Neo4j::Rails::Model
       indexes :topics, :type => 'string'
       indexes :topic_facets, :type => 'string', :index => :not_analyzed
   end
+
+  def default_values
+    self.uuid ||= SecureRandom.urlsafe_base64
+  end
+
 
   
   # this configures how tire indexs into Elastic Search
@@ -57,9 +71,23 @@ class Document < Neo4j::Rails::Model
           json.to_json
   end
   
-  
+  def creators_by_roles
+    roles_creators = {}
+    self.creators_rels.each do |rel|
+      role = rel.role ? rel.role : "creator"
+      roles_creators[role] ||= []
+      roles_creators[role] << rel.start_node
+    end
 
+    roles_creators
+  end  
   
+  
+  # this returns the first item with a type of pdf. It's used to send json to document viewer 
+  def pdf_item
+    pdf = self.items.collect { |i| i if i.url.include?('pdf') }
+    pdf.first
+  end
   
   
   # this is a fix for rails that allows us to destroy relationships without destroying the item.
@@ -112,6 +140,7 @@ class Document < Neo4j::Rails::Model
       self.uuid ||= SecureRandom.urlsafe_base64
       self.title ||= "Untitled Document"
       self.items.build
+      self.topics.build
       self
   end
 

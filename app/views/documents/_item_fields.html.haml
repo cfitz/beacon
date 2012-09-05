@@ -1,5 +1,9 @@
 = f.input :parent_uuid, :as => :hidden, :input_html => { :value => @document.uuid }
 .control-group
+  = f.label "Public: ", :class => 'checkbox'
+  .controls
+    = f.check_box :open_access, :class => 'checkbox'
+.control-group
   = f.label :uri, :class => 'uri_field'
   .controls
     = f.url_field :uri, :class => 'uri_field'

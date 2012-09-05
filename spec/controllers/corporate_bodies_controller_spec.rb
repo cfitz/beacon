@@ -82,7 +82,7 @@ describe CorporateBodiesController do
 
       it "redirects to the created corporate_body" do
         post :create, {:corporate_body => valid_attributes}, valid_session
-        response.should redirect_to(CorporateBody.last)
+        response.should redirect_to(CorporateBody.all.to_a.last)
       end
     end
 

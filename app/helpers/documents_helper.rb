@@ -9,7 +9,11 @@ module DocumentsHelper
     if item.url.include?("catalog.wmu")
       "<li><a href='#{item}'><i class='icon-book'></i><b>Koha Record</b></a></li>"
     elsif item.url.include?("pdf")
-      "<li><a href='#{item}'><i class='icon-file'></i><b>PDF</b></a></li>"
+      if current_user or item.public?
+        "<li><a href='#{item.authenticated_s3_get_url}'><i class='icon-file'></i><b>PDF</b></a></li>"
+      else
+        "<li><b>PDF</b></li>"
+      end
     elsif !item.url.include?("missing") # paperclip has a url of 'missing.pgn' if there isn't an attachment
       "<li><a href='#{item}'><i class='icon-file'></i><b>External Link</b></a></li>"
     else

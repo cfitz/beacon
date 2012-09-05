@@ -18,6 +18,8 @@
 //= require bootstrap-datepicker
 //= require jit
 //= require jit-yc
+//= require document-viewer/viewer.js
+//= require document-viewer/templates.js
 
 //= require_tree .
 

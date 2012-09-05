@@ -17,6 +17,30 @@
   width: .5em
 }
 
+.sidebar-nav { 
+  dl {
+    dt { width: 75px; }
+    dd { margin-left: 88px; } 
+  }
+}
+
+
+.sidebar-nav.facets { 
+ ul {
+  li {
+    a { 
+      display: inline;
+      padding: 1px 30px;
+    }
+    span { 
+      float: right;
+    }
+  
+  }
+ 
+ }
+}
+
 
 .person_list {
   list-style: none;

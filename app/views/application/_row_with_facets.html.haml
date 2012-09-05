@@ -1,6 +1,6 @@
 .row-fluid
   .span3
-    .well.sidebar-nav
+    .well.sidebar-nav.facets
       %ul.nav.nav-list
         - @facets.each_pair do | facet_label, facet_values| 
           = facet_list(facet_label, facet_values)

@@ -2,17 +2,35 @@ require 'will_paginate/array'
 class TopicsController < ApplicationController
   # GET /topics
   # GET /topics.json
+  
   def index
-    # q= Neo4j.query {  query(Person, "'*:*'", :fulltext) -( r =  rel("r:`Person#created_work`") ) - :c; ret n, count(r) }  
     
-    query = Neo4j.query {  query(Document, "'*:*'")-( r = rel("r:topics") )-:n; ret(:n, count(r)).desc(count(r)) } 
-    @topics = query.to_a.paginate(:page => params[:page], :per_page => 10 )
-
+    params[:q].blank? ? @topics = Topic.all.paginate(:page => params[:page], :per_page => 10 ) : @topics = Topic.all("name: #{params[:q].split(" ").first}*", :type => :fulltext).asc(:name).paginate(:page => params[:page], :per_page => 10 )
+    
+      
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @topics }
+      format.json
     end
   end
+
+
+
+
+
+
+
+  # GET /people/1
+  # GET /people/1.json
+  def show
+    @topic = Topic.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @topic }
+    end
+  end
+
 
 
 end

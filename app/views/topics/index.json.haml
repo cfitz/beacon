@@ -1,0 +1,6 @@
+- topic_array = []
+- @topics.each do |topic|
+  - topic_array << { "id" => topic.id, "name" => topic.name }
+
+:plain
+  #{topic_array.to_json}

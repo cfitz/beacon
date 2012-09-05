@@ -4,7 +4,10 @@
 
 
 $ -> $('#document_summary').wysihtml5();
-$ -> bindTypeahead($('.typeahead'))
+$ -> bindCreatorTypeahead($('.creator-typeahead'))
+$ -> bindTopicTypeahead($('.topic-typeahead'))
+
+
 
 
 $(document).on('focus', "[data-behaviour~='datepicker']", ( ->
@@ -20,8 +23,11 @@ $('.remove-row').live( 'click', ( ->
 $ -> window.nestedFormEvents.insertFields = (content, assoc, link) ->
      content = content.replace("readonly" , "")
      jContent = $(content)
-     bindTypeahead(jContent.find('.typeahead'))     
+     bindCreatorTypeahead(jContent.find('.creator-typeahead'))     
+     bindTopicTypeahead(jContent.find('.topic-typeahead'))     
      jContent.insertBefore(link)
+
+$ -> DV.load("#{window.location}.json", { container: '#DV-container', width: '100%', height: 500,  sidebar: false });
 
 
 insertSelected = (selected, inputNode ) -> 
@@ -48,7 +54,7 @@ insertSelected = (selected, inputNode ) ->
   
 
 
-bindTypeahead = (node) ->
+bindCreatorTypeahead = (node) ->
   node.typeahead(
       source: (typeahead, query) ->
         $.ajax(
@@ -62,5 +68,17 @@ bindTypeahead = (node) ->
   )
 
 
+bindTopicTypeahead = (node) ->
+  node.typeahead(
+      source: (typeahead, query) ->
+        $.ajax(
+          url: "/topics.json?q="+query
+          success: (data) => 
+           typeahead.process(data)
+        )
+      property: "name"
+      onselect: (obj) =>
+        insertSelected(obj, node)
+  )
 
 
