@@ -139,6 +139,7 @@ class Document < Neo4j::Rails::Model
   def prepare!
       self.uuid ||= SecureRandom.urlsafe_base64
       self.title ||= "Untitled Document"
+      self.creators.build
       self.items.build
       self.topics.build
       self

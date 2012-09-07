@@ -29,28 +29,18 @@ $ -> window.nestedFormEvents.insertFields = (content, assoc, link) ->
 
 $ -> DV.load("#{window.location}.json", { container: '#DV-container', width: '100%', height: 500,  sidebar: false });
 
-
+# once selected, we want to make the input box readonly, disable it for updating, and change the hidden id field so that 
+# the relationship gets made. 
 insertSelected = (selected, inputNode ) -> 
-   clone = inputNode.clone()
-   
-   index = inputNode.closest('section').find('.fields').size()
-   docType = inputNode.attr('id') + "_attributes"
-    
-   name = "document[#{docType}][#{index}]"
-   create = name + "[id]"
-   destroy = name + "[_destroy]"
-   
-   destroyInput = inputNode.next('input')
-   destroyInput.attr('name', destroy)
-   
-   clone.attr('name', create)
-   clone.attr('value', selected.id )
-   clone.attr('type', 'hidden')
-   
-   inputNode.closest('div').append(clone)
-   
-   inputNode.attr('readonly', true)
-   inputNode.removeAttr('name')
+  idField = inputNode.siblings("div.control-group.hidden")
+  inputField = idField.find('input')
+  inputField.attr('value', selected.id) 
+  inputNode.attr('readonly', true)
+  inputNode.removeAttr('name')
+
+
+
+  
   
 
 

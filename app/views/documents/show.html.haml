@@ -1,6 +1,6 @@
 - model_class = Document
 .page-header
-  %h4=t '.title', :default => @document.title
+  %h3=t '.title', :default => @document.title
 
 .row-fluid
   .span3
@@ -26,11 +26,16 @@
         %dt= model_class.human_attribute_name(:summary) + ':'
         %dd= @document.summary
   .span9
-    #DV-container
-      .DV-loadingDocument
-        %span Loading
-      %noscript
-        #DV-noJS The Document Viewer requires that you enable Javascript.
+    - if show_pdf?
+      #DV-container
+        .DV-loadingDocument
+          %span Loading
+        %noscript
+          #DV-noJS The Document Viewer requires that you enable Javascript.
+    - else
+      .hero-unit
+        %h1 Online Document Currently Not Available
+        %p Please check back soon. Thanks!
     
 - if current_user && current_user.admin?
   .form-actions

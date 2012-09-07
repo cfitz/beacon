@@ -1,11 +1,11 @@
-= simple_nested_form_for @document, :html => { :class => 'form-horizontal',  :multipart => true, :autocomplete => 'off' } do |f|
+= simple_nested_form_for @document, :html => { :class => 'form-horizontal',  :multipart => true } do |f|
   %section#document-info
     .control-group
       = f.label :title, :class => 'control-label'
       .controls
         = f.text_field :title, :class => 'text_field'
     .control-group
-      = f.label :date, :class => 'control-label'
+      = f.label :publication_date, :class => 'control-label'
       .controls
         = f.text_field :date, 'data-behaviour' => 'datepicker'
     .control-group
@@ -13,18 +13,15 @@
       .controls
         = f.text_field :uuid, :class => 'text_field', :readonly => 'true'
   %section#creators
-    %h3 
-      Creators
+    %legend Creators
     = f.fields_for :creators, Person if !@document.creators.first.nil?       
     = f.link_to_add "Add a creator", :creators
   %section#topics
-    %h3 
-      Topics
+    %legend Topics
     = f.fields_for :topics, Topic if !@document.topics.first.nil?
     = f.link_to_add "Add an topics", :topics
   %section#items
-    %h3 
-      Items
+    %legend Items
     = f.fields_for :items, Item if !@document.items.first.nil?
     = f.link_to_add "Add an item", :items
   %section.form-actions

@@ -4,10 +4,10 @@ require 'bundler/capistrano'
 
 
 # SCM
-server       "ec2-50-19-208-69.compute-1.amazonaws.com", :web, :app, :primary => true
+server       "195.178.246.38", :web, :app, :primary => true
 set :repository,        "git@github.com:cfitz/beacon.git"
 set :branch,            "master"
-set :user,              "root"
+set :user,              "torquebox"
 set :scm,               :git
 set :scm_verbose,       true
 set :use_sudo,          false
@@ -20,7 +20,7 @@ set :jboss_init_script, "/etc/init.d/jboss-as-standalone"
 set :rails_env, 'production'
 set :app_context,       "/"
 set :app_ruby_version, '1.9'
-set :application, "ec2-50-19-208-69.compute-1.amazonaws.com"
+set :application, "195.178.246.38"
 
 default_environment['JRUBY_OPTS'] = '--1.9'
 default_environment['PATH'] = '/opt/torquebox/current/jboss/bin:/opt/torquebox/current/jruby/bin:/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/root/bin:/root/bin'

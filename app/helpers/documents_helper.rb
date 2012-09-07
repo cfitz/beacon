@@ -7,7 +7,7 @@ module DocumentsHelper
   # this takes an item and makes the proper li for it. this is ugly as hell. 
   def render_list_item(item)
     if item.url.include?("catalog.wmu")
-      "<li><a href='#{item}'><i class='icon-book'></i><b>Koha Record</b></a></li>"
+      "<li><a href='#{item.url}'><i class='icon-book'></i><b>Koha Record</b></a></li>"
     elsif item.url.include?("pdf")
       if current_user or item.public?
         "<li><a href='#{item.authenticated_s3_get_url}'><i class='icon-file'></i><b>PDF</b></a></li>"
@@ -45,6 +45,21 @@ module DocumentsHelper
        authors.enum_for(:each_with_index).collect { |author, index| concat( link_to " #{author.name}#{ ';' unless index == (authors.to_a.size - 1) }", author  ) }
      end
    end
+   
+   
+   # this determines if there's a pdf to be shown and it's public
+   def show_pdf?
+      if @document.pdf_item.nil? # there's no pdf, so show nothign
+        false
+      elsif @document.pdf_item.public? # there's a pdf and it's public, so show it
+       true
+      elsif @document.pdf_item and current_user # there's a pdf, it's private, but we're logged in, so show it. 
+       true
+      else # there's a pdf, it's private, and we're not logged in, so no show.  
+       false
+      end
+   end
+   
   
  
 end
