@@ -65,3 +65,10 @@ Beacon::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 end
+
+# this is used cuz asset precompile with rubyrhino is fucking sllllooooooooowwwwwwwwwww.....
+#https://aaronblohowiak.telegr.am/blog_posts/precompiling-assets-under-jruby
+if defined?(ExecJS) && system('which node')
+      puts "Using Node ExecJS runtime"
+      ExecJS.runtime = ExecJS::Runtimes::Node
+end
