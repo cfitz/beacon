@@ -12,11 +12,12 @@
  *= require bootstrap_and_overrides
  *= require bootstrap-wysihtml5
  *= require bootstrap-datepicker
- *= require Hypertree
+ * require Hypertree
  * require infoviz-base
  *= require document-viewer/viewer-datauri
  *= require document-viewer/plain-datauri
  *= require document-viewer/plain
+ *= require bootstrap_and_overrides
  *= require_tree .
 */
 
@@ -26,6 +27,7 @@
 .navbar a.brand {
  font-family: Sarina, Arial, Helvetica, sans-serif;
  color: white;
+ padding:0px 20px 0px;
 }
 
 .navbar ul#login {
