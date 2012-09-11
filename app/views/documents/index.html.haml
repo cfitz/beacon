@@ -12,7 +12,7 @@
   %tbody
     - @documents.each do |document|
       %tr
-        %td
+        %td.document-information
           .span12.title-container
             = link_to document.title, document_path(document), :class => "title_link"
             %em.date

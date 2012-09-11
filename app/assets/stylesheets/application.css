@@ -35,6 +35,12 @@
   
 }
 
+.container-fluid {
+  padding-top: 60px;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
 
 i.icon-beacon {
     background-image: url("beacon.png");
@@ -77,15 +83,15 @@ table.table {
   }
 
 
-div.title-container {
+td.document-information div.title-container {
    float: left; 
 }
 
-div.span12.document-fields {
+td.document-information div.span12.document-fields {
   margin-left: 0;
 }
 
-.table a.title_link {
+td.document-information  a.title_link {
   color: #2E4F81;
   text-decoration: none;
 }
