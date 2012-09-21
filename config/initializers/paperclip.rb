@@ -17,9 +17,11 @@ Paperclip.interpolates :uuid do |attachment, style|
     attachment.instance.parent_uuid
 end
 
+S3_CREDENTIALS = { "access_key_id" => ENV['AWS_KEY'], "secret_access_key" => ENV['AWS_SECRET'] } 
+
 Paperclip::Attachment.default_options.merge!(
   :storage => 's3',
-  :s3_credentials => YAML.load_file("#{Rails.root}/config/s3.yml"),
+  :s3_credentials => S3_CREDENTIALS,
   :path => "#{Rails.env}/:uuid/:id/:basename.:extension",
   :bucket => 'wmu-library',
   :s3_permissions => {

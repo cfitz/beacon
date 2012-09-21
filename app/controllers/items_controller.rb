@@ -1,6 +1,10 @@
 class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
+  include AuthenticationHelper
+  before_filter :enforce_logged_in, :except => [:show, :index]
+  
+  
   def index
     @items = Item.all
 
@@ -14,12 +18,19 @@ class ItemsController < ApplicationController
   # GET /items/1.json
   def show
     @item = Item.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @item }
+    
+    if params[:url]
+      enforce_aws_permissions( params[:url] )
+    else
+      respond_to do |format|
+        format.html # show.html.erb
+        format.json { render json: @item }
+      end
     end
   end
+  
+  
+
 
   # GET /items/new
   # GET /items/new.json

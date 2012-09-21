@@ -21,26 +21,28 @@ class PersonImporter
       id = row[1]
       program_name = row[2]
       country = row[3]
+      title = name.split(" ").pop
+      name.gsub!(title, "").strip!
       
-      p = Person.search name, :load => true
-      p = p.first
+      search = Person.search "\"#{name}\"", :load => true
       
       
-      if p.nil?      
-        
-        title = name.split(" ").pop
-        name.delete!(title).strip!
+      if search.results.length < 1           
         name = name.titleize
-        p = Person.create!(:name => name, :title => title)
-     end
+        person = Person.create!(:name => name, :title => title)
+      else
+        person = search.results.first
+        person.title = title
+        person.save
+      end
       
         program = CorporateBody.find_or_create_by!(:name => program_name )
         program.is_part_of << @wmu
-        puts p.name
-        p.has_membership << program
-        p.has_membership_rels.first.member_type = "World Maritime University Alumni"
+        puts person.name
+        person.has_membership << program
+        person.has_membership_rels.first.member_type = "World Maritime University Alumni"
       
-        p.save
+        person.save
       
         
         

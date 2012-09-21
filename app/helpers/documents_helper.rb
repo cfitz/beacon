@@ -10,7 +10,7 @@ module DocumentsHelper
       "<li><a href='#{item.url}'><i class='icon-book'></i><b>Koha Record</b></a></li>"
     elsif item.url.include?("pdf")
       if current_user or item.public?
-        "<li><a href='#{item.authenticated_s3_get_url}'><i class='icon-file'></i><b>PDF</b></a></li>"
+        "<li><a href='#{item.generate_asset_path}'><i class='icon-file'></i><b>PDF</b></a></li>"
       else
         "<li><b>PDF</b></li>"
       end

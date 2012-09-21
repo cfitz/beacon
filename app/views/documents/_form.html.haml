@@ -1,4 +1,4 @@
-= simple_nested_form_for @document, :html => { :class => 'form-horizontal',  :multipart => true } do |f|
+= simple_nested_form_for @document, :html => { :class => 'form-horizontal',  :multipart => true, :autocomplete => 'off' } do |f|
   %section#document-info
     .control-group
       = f.label :title, :class => 'control-label'
@@ -12,10 +12,11 @@
       = f.label :uuid, :class => 'control-label'
       .controls
         = f.text_field :uuid, :class => 'text_field', :readonly => 'true'
-  %section#creators
+  %section#creators_rels
     %legend Creators
-    = f.fields_for :creators, Person if !@document.creators.first.nil?       
-    = f.link_to_add "Add a creator", :creators
+    - @document.creators_rels.each_with_index do |rel, index|
+      = render :partial => "creators_rels", :locals => { :rel => rel, :index => index}
+    %a{:href => "javascript:void(0)", :class=> "add_nested_fields", :data => {:association => "creators_rels"}} Add a creator
   %section#topics
     %legend Topics
     = f.fields_for :topics, Topic if !@document.topics.first.nil?
@@ -27,3 +28,4 @@
   %section.form-actions
     = f.submit nil, :class => 'btn btn-primary'
     = link_to t('.cancel', :default => t("helpers.links.cancel")), documents_path, :class => 'btn'
+= render :partial => "creators_rels_blueprint"

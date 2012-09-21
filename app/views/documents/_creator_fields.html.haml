@@ -3,4 +3,5 @@
   .controls
     = f.input :id, :as => :hidden, :input_html => { :value => f.object.id }
     = f.text_field :name, :class => 'typeahead creator-typeahead', :readonly => f.object.persisted?
+    =# f.select(:role, f.object.roles(@document)  )
     = f.link_to_remove "x"

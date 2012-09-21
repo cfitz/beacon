@@ -63,13 +63,8 @@ class DocumentImporter
       record.fields("100").each do |onehund|
         if onehund["a"]
           name =  cleanup(onehund['a'].chomp(".").titleize)
-          puts name
-          p = Person.find(:name => name, :index => :fulltext)
-          if p
-            work.creators << p
-          else
-            work.creators << Person.create(:name => name )
-          end
+          p = Person.find_or_create_by!(:exact_name => name)
+          creator = Creator.new(:creators, work, p, {:role => "author" })
         end
       end
       
@@ -81,16 +76,24 @@ class DocumentImporter
       record.fields('856').each do |e56|
         url = e56["u"]
         
-        if url.include?("s3-eu-west-1.amazonaws.com") && true == false
+        if url.include?("s3-eu-west-1.amazonaws.com") # && true == false
           # http://s3-eu-west-1.amazonaws.com/wmu-library-content/Dissertations/U-Wje8mmUr3O-tUXaEApZw/Herbert%20Christian.pdf
           url = url.gsub("http://s3-eu-west-1.amazonaws.com/wmu-library-content/", '')
-          file = File.join('/Users/chrisfitzpatrick/Documents/wmu_online', url)
-          pdf = Dir.glob(File.join(File.dirname(file), '*.pdf') ).first
+          file = File.join('/Volumes/WMU/', url)
+          puts file
+          dir = File.dirname(file)
+          pdf = Dir.glob(File.join(dir, '*.pdf') ).first
           
-          item = work.items.create( :item_type => "PDF")
+          puts pdf
+          item = Item.create( :item_type => "PDF")
           item.attachment = File.new(pdf)
+          work.items << item
           work.save
           item.save
+          
+          new_dir = File.join("/Volumes/WMU/wmu_online/#{work.uuid}")
+          FileUtils.mkdir(new_dir)
+          FileUtils.cp_r(dir, File.join(new_dir, item.id))
         
           # content = get_content(url)
           #work.content = content unless content.nil? 

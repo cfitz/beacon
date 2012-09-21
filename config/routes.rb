@@ -13,6 +13,7 @@ Beacon::Application.routes.draw do
   resources :people
   resources :annotations
   resources :pages
+
   resources :items
   
   resources :documents do

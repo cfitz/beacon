@@ -11,8 +11,15 @@
   %tbody
     - @people.each do |person|
       %tr
-        %td= link_to person.name, person_path(person)
-        %td= person.title
+        %td= link_to "#{person.name} (#{person.title})", person_path(person)
+        %td
+          %ul
+            - person.documents_created_rels.each do |rel|
+              %li= rel.role
+        %td
+          %ul
+            - person.has_membership_rels.each do |rel|
+              %li= "#{rel.member_type} of #{rel.end_node.name}"
         - if current_user && current_user.admin?
           %td
             = link_to t('.edit', :default => t("helpers.links.edit")), edit_person_path(person), :class => 'btn btn-mini'

@@ -12,8 +12,16 @@
   %dt= model_class.human_attribute_name(:documents) + ":"
   %dd
     %ul
-      - @person.created_work.each do |doc|
-        %li=  link_to(doc.title, doc)
+      - @person.documents_created_rels.each do |rel|
+        %li
+          = link_to( "#{rel.start_node.title} (#{rel.role})", rel.start_node)
+
+  %dt= model_class.human_attribute_name(:memberships) + ":"
+  %dd
+    %ul
+      - @person.has_membership_rels.each do |rel|
+        %li
+          = link_to( "#{rel.end_node.name} (#{rel.member_type})", rel.start_node)
 
 
 - if current_user && current_user.admin?

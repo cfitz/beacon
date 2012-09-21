@@ -36,7 +36,7 @@ insertSelected = (selected, inputNode ) ->
   inputField = idField.find('input')
   inputField.attr('value', selected.id) 
   inputNode.attr('readonly', true)
-  inputNode.removeAttr('name')
+  #inputNode.removeAttr('name')
 
 
 

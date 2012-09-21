@@ -11,10 +11,10 @@ module NestedForm
     args << options
     @fields ||= {}
     @template.after_nested_form(association) do
-      if object.class._decl_rels[association.to_sym].target_class
+      if object.class._decl_rels[association.to_sym] && object.class._decl_rels[association.to_sym].target_class
         model_object = object.class._decl_rels[association.to_sym].target_class.new      
       else
-        model = Concept.new
+        model_object = Concept.new
       end
       
       blueprint = fields_for(association, model_object, :child_index => "new_#{association}", &@fields[association])

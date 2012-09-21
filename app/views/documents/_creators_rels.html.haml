@@ -1,0 +1,11 @@
+%div#creators_rels_fields
+  .fields
+    .control-group
+      %label{:class => "string optional control-label control-label", :for => "document_creators_rels_attributes_#{index}_creators_rels_name"} Name
+      .controls
+        = link_to( rel.end_node.name, rel.end_node )
+        = hidden_field_tag( "document_creators_rels_attributes_#{index}_id", rel.id, { :name => "document[creators_rels_attributes][#{index}][id]"} )
+        = select_tag("document_creators_rels_attributes_#{index}_role", options_for_select(rel.possible_roles), { :name => "document[creators_rels_attributes][#{index}][role]"} )
+        = hidden_field_tag( "document_creators_rels_attributes_#{index}__destroy", "false", { :name => "document[creators_rels_attributes][#{index}][__destroy]"} )
+        %a{:href => "javascript:void(0)", :class=> "remove_nested_fields", :data => {:association => "creators_rels"}} x
+        

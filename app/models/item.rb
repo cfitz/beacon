@@ -3,10 +3,12 @@ class Item < Neo4j::Rails::Model
   include Tire::Model::Search
   include Tire::Model::Callbacks
   include Neo4jrb::Paperclip
-  index :id
-   
+  include Rails.application.routes.url_helpers
+     
   before_save :default_values
   validates :document, :presence => true
+  
+  index :id
   
   
   property :uri, :type => String
@@ -36,15 +38,10 @@ class Item < Neo4j::Rails::Model
   end
   
   def url
-   self.attachment.exists? ? self.attachment.url : self.uri
+   !self.attachment.nil? ? self.attachment.url : self.uri
   end
  
-  def authenticated_s3_get_url(base_path = attachment.path,  options={})
-     options.reverse_merge! :expires_in => 10.minutes, :use_ssl => true
-     AWS::S3::S3Object.url_for base_path, attachment.options[:bucket], options
-  end
- 
- 
+  
   def name
     self.item_type.empty? ? "View Document" : self.item_type
   end
@@ -76,19 +73,30 @@ class Item < Neo4j::Rails::Model
        "title" => self.document.title,
        "description" =>   self.document.summary,
        "id" => self.document.id,
-       "pages" => self.pages,
+       "pages" => self.pages ? self.pages : 150,
         "annotations" => [], 
         "sections" => [],
        "resources" => {
          "page" => { 
-           "text" => authenticated_s3_get_url("#{self.basedir}/text/{page}.txt") , 
-           "image" => authenticated_s3_get_url("#{self.basedir}/images/{size}/{page}.png") },
-         "pdf"  =>  authenticated_s3_get_url,
+           "text" => generate_asset_path("#{self.basedir}/text/{page}.txt") , 
+           "image" => generate_asset_path("#{self.basedir}/{size}/{page}.png") },
+         "pdf"  =>  generate_asset_path(self.url),
          "search" => "http://"
        }
      }.to_json
     
   end
+  
+  
+  
+  # this generates the proper url to the item controller that will redirect to the aws asset
+  def generate_asset_path(url = self.url )
+    "#{item_url(self, :only_path => true)}?url=#{url}" 
+  end
+ 
+ 
+  
+  private
   
   # uses ApplicationHelpers transliterate method to clean filenames
   def transliterate_file_name
@@ -107,6 +115,7 @@ class Item < Neo4j::Rails::Model
      s.gsub!(/\ +/, '-')
      return s
    end
+
 
   
   
