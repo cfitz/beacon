@@ -8,14 +8,14 @@ module DocumentsHelper
   def render_list_item(item)
     if item.url.include?("catalog.wmu")
       "<li><a href='#{item.url}'><i class='icon-book'></i><b>Koha Record</b></a></li>"
-    elsif item.url.include?("pdf")
+    elsif item.url.include?("docs.google.com")
       if current_user or item.public?
-        "<li><a href='#{item.generate_asset_path}'><i class='icon-file'></i><b>PDF</b></a></li>"
+        "<li><a href='#{item.url}'><i class='icon-file'></i><b>PDF</b></a></li>"
       else
         "<li><b>PDF</b></li>"
       end
     elsif !item.url.include?("missing") # paperclip has a url of 'missing.pgn' if there isn't an attachment
-      "<li><a href='#{item}'><i class='icon-file'></i><b>External Link</b></a></li>"
+      "<li><a href='#{item.url}'><i class='icon-file'></i><b>External Link</b></a></li>"
     else
       ""
     end    
@@ -51,7 +51,7 @@ module DocumentsHelper
    def show_pdf?
       if @document.pdf_item.nil? # there's no pdf, so show nothign
         false
-      elsif @document.pdf_item.public? # there's a pdf and it's public, so show it
+      elsif @document.pdf_item
        true
       elsif @document.pdf_item and current_user # there's a pdf, it's private, but we're logged in, so show it. 
        true

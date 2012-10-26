@@ -58,7 +58,7 @@ module ApplicationHelper
   # returns li's for the facets
   def facet_list(facet_label, facet_values)
     facets = ""
-    facets << content_tag(:li, facet_label, :class => "nav-header")
+    facets << content_tag(:li, facet_label.gsub("_facets", ""), :class => "nav-header")
     facet_values["terms"].each do |f|
       facet_term = "#{facet_label}:#{f['term']}"
       params_facet = params[:facet] ? params[:facet] : []

@@ -27,11 +27,7 @@
         %dd= @document.summary
   .span9
     - if show_pdf?
-      #DV-container
-        .DV-loadingDocument
-          %span Loading
-        %noscript
-          #DV-noJS The Document Viewer requires that you enable Javascript.
+      = @document.pdf_item.embed
     - else
       .hero-unit
         %h1 Online Document Currently Not Available

@@ -116,7 +116,7 @@ class Document < Neo4j::Rails::Model
   
   # this returns the first item with a type of pdf. It's used to send json to document viewer 
   def pdf_item
-    pdf = self.items.collect { |i| i if i.url.include?('pdf') }
+    pdf = self.items.collect { |i| i if i.url.include?('docs.google.com') }
     pdf.first
   end
   

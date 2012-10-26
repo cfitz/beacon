@@ -34,7 +34,7 @@ class DocumentImporter
   def process
     for record in @marc
       
-     if record.fields('856').first and record.fields('856').first["u"]
+    # if record.fields('856').first and record.fields('856').first["u"]
       
       title = ""
       date = ""
@@ -70,36 +70,19 @@ class DocumentImporter
       
       
       work.save
-      item = work.items.create(:uri => "http://catalog.wmu.se/cgi-bin/koha/opac-detail.pl?biblionumber=#{biblio}", :item_type => "KOHA")
+      item = work.items.create(:url => "http://catalog.wmu.se/cgi-bin/koha/opac-detail.pl?biblionumber=#{biblio}", :item_type => "KOHA")
       item.save
 
       record.fields('856').each do |e56|
         url = e56["u"]
         
-        if url.include?("s3-eu-west-1.amazonaws.com") # && true == false
+        if url
           # http://s3-eu-west-1.amazonaws.com/wmu-library-content/Dissertations/U-Wje8mmUr3O-tUXaEApZw/Herbert%20Christian.pdf
-          url = url.gsub("http://s3-eu-west-1.amazonaws.com/wmu-library-content/", '')
-          file = File.join('/Volumes/WMU/', url)
-          puts file
-          dir = File.dirname(file)
-          pdf = Dir.glob(File.join(dir, '*.pdf') ).first
-          
-          puts pdf
-          item = Item.create( :item_type => "PDF")
-          item.attachment = File.new(pdf)
-          work.items << item
-          work.save
+          item = work.items.create( :item_type => "PDF", :url => url )
           item.save
-          
-          new_dir = File.join("/Volumes/WMU/wmu_online/#{work.uuid}")
-          FileUtils.mkdir(new_dir)
-          FileUtils.cp_r(dir, File.join(new_dir, item.id))
-        
-          # content = get_content(url)
-          #work.content = content unless content.nil? 
         end        
       end
-
+      work.save
       
      
       
@@ -134,8 +117,12 @@ class DocumentImporter
  
     
     
-     end
+  #   end
     end #for record in marc
+    
+    t = Thing.create!
+    t.delete
+    
   end # process
   
 end
