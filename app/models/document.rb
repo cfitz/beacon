@@ -2,34 +2,35 @@ class Document < Neo4j::Rails::Model
 
   include Tire::Model::Search
   include Tire::Model::Callbacks
-  include Neo4jrb::Paperclip
   include BeaconSearch
-
+  include Sluggable
+  
+  
+  validate :ensure_named, :before => :create
   before_save :default_values
 
-
   index_name "#{Tire::Model::Search.index_prefix}documents"
-  
-  
-  index :id
-  
+    
+  index :id  
   property :title, :type => String, :index => :exact
+  alias_attribute :name, :title
+  
+  attr_accessor :content # used to index full-text content
+  attr_accessor :highlight # used to store the highlight content in search
+  
+  property :slug, :type => String, :index => :exact
   property :date, :type => String, :index => :exact
   property :uuid, :type => String
   property :summary, :type => String, :index => :exact
   
-
   property :created_at, :type => DateTime
   index :created_at
   property :updated_at, :type => DateTime
   index :updated_at
 
 
-
-  has_n(:creators).relationship(Creator)
-  
+  has_n(:creators).relationship(Creator)  
   #.from(:Person, :created_work )
-  
   has_n(:items).to(Item).relationship(WorkItem)
   has_n(:pages).from(:Page)
   has_n(:sections).from(:Section)
@@ -37,18 +38,29 @@ class Document < Neo4j::Rails::Model
   
   has_n(:topics).to(Topic)
   
-  
   #accepts_nested_attributes_for :creators, :allow_destroy_relationship => true, :reject_if => proc { |attributes| attributes['id'].blank? && attributes['name'].blank? }
   accepts_nested_attributes_for :items
   accepts_nested_attributes_for :topics, :allow_destory_relationship => true
+
+
+  def name=(name)
+    self.title = name
+  end
+  
+  def default_name
+   "Untitled Document"
+  end
   
   def self.facets
       [ :format, :program_facets ]
   end
 
+
  
   mapping do
       indexes :topics, :type => 'string'
+      indexes :title, analyzer: 'snowball', boost: 100
+      indexes :content, analyzer: 'snowball', boost: 50
       indexes :topic_facets, :type => 'string', :index => :not_analyzed
       indexes :program_facets, :type => 'string', :index => :not_analyzed
   end
@@ -63,18 +75,19 @@ class Document < Neo4j::Rails::Model
   def to_indexed_json
          json = {
             :title   => title,
+            :content => content,
             :summary => summary,
             :topic_facets => topics.collect { |t| t.name },
             :program_facets => programs,
             :creators => creators.collect { |c| c.name },
             :topics => topics.collect { |t| t.name },
-            :format => items.collect { |i| i.item_type },
             :items => items.collect { |i| i.url }
           }
           json[:date] = date if date
           json.to_json
   end
   
+  # this returns a hash of creators and roles. like: { "creator" => Person }
   def creators_by_roles
     roles_creators = {}
     self.creators_rels.each do |rel|
@@ -82,11 +95,16 @@ class Document < Neo4j::Rails::Model
       roles_creators[role] ||= []
       roles_creators[role] << rel.end_node
     end
-
     roles_creators
   end  
   
+  # this returns the first item with a type of pdf. It's used to send json to document viewer 
+  def pdf_item
+    pdf = self.items.collect { |i| i if i.url.include?('docs.google.com') }
+    pdf.first
+  end
   
+  # this is to fix nested attributes submitted by the form. 
   def creators_rels_attributes=(args={})
     puts args
     args.each_pair do |k,v|
@@ -111,13 +129,6 @@ class Document < Neo4j::Rails::Model
         end
       end
     end
-  end
-  
-  
-  # this returns the first item with a type of pdf. It's used to send json to document viewer 
-  def pdf_item
-    pdf = self.items.collect { |i| i if i.url.include?('docs.google.com') }
-    pdf.first
   end
   
   
@@ -161,11 +172,10 @@ class Document < Neo4j::Rails::Model
     self.title
   end
   
-  
   # returns the available_formats of the document
   def available_formats
     formats = self.items.collect {|i| i.item_type }
-    return formats.compact!
+    return formats.compact
   end
   
   # this returns an array of all the WMU program tags (MET, SPM, etc. ) related to the document. 
@@ -176,15 +186,8 @@ class Document < Neo4j::Rails::Model
     programs.collect! { |p| p.name }
     programs.uniq
   end
-  
-  
-  def prepare!
-      self.uuid ||= SecureRandom.urlsafe_base64
-      self.title ||= "Untitled Document"
-      self.items.build
-      self.topics.build
-      self
-  end
+
+
 
 
 end

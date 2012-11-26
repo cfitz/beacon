@@ -79,7 +79,12 @@ module ApplicationHelper
     new_params =  { :controller => params[:controller], :action => params[:action], :facet => facets }
     new_params[:query] = params[:query] if params[:query]  
     
-    return content_tag(:li, :class => "remove_facet active") {  link_to( "#{facet_term.split(":").last}:#{facet_count}", new_params )  }
+    return content_tag(:li, :class => "remove_facet active") {  
+            link_to(  new_params ) {
+              content_tag(:span, :class => "label label-important") { 
+                  content_tag(:i, "", :class => "icon-remove icon-white") + "#{facet_term.split(":").last}"
+                    } }
+              }
     
   end
   

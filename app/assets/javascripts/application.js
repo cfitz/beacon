@@ -14,7 +14,6 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require jquery_nested_form
-//= require bootstrap-wysihtml5-all
 //= require bootstrap-datepicker
 //= require jit
 //= require jit-yc

@@ -1,10 +1,9 @@
+# this should be a temporary hack. 
+
 module Neo4j
   module Rails
     module Relationships
       class RelsDSL
-      
-      
-      
       
         def last
           self.to_a.last
@@ -17,11 +16,6 @@ module Neo4j
         def to_ary
           self.to_a
         end
-        
-        def id
-          "123"
-        end
-        
       end
     end
   end

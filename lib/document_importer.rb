@@ -1,5 +1,4 @@
 require 'marc'
-#require 'pdf-reader'
 require 'open-uri'
 
 # this imports marc records as works into the neo4j db
@@ -21,14 +20,7 @@ class DocumentImporter
   def cleanup(string)
     return string.gsub('"', "").strip.chomp.chomp(".").chomp("-").strip.chomp("/").strip
   end
-  
-  def get_content(url)
-     %x|wget -c '#{url}' -O '/tmp/pdf.pdf'|
-    reader = PDF::Reader.new(open("/tmp/pdf.pdf"))
-    reader.text
-  rescue
-    nil
-  end
+ 
   
   
   def process
@@ -54,7 +46,7 @@ class DocumentImporter
       end 
 
       
-      work = Document.create!(:title => title, :uuid => biblio ).prepare!
+      work = Document.create!(:title => title, :uuid => biblio )
       
       unless date.nil?
         work.date = date
@@ -63,7 +55,7 @@ class DocumentImporter
       record.fields("100").each do |onehund|
         if onehund["a"]
           name =  cleanup(onehund['a'].chomp(".").titleize)
-          p = Person.find_or_create_by!(:exact_name => name)
+          p = Person.find_or_create_by!(:name => name)
           creator = Creator.new(:creators, work, p, {:role => "author" })
         end
       end
@@ -120,7 +112,7 @@ class DocumentImporter
   #   end
     end #for record in marc
     
-    t = Thing.create!
+    t = Thing.create!(:name => "crap")
     t.delete
     
   end # process

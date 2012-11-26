@@ -24,7 +24,7 @@ describe ThingsController do
   # Thing. As you add validations to Thing, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {}
+    {:name => "Foo Thing"}
   end
 
   # This should return the minimal set of values that should be in the session
@@ -81,7 +81,7 @@ describe ThingsController do
 
       it "redirects to the created thing" do
         post :create, {:thing => valid_attributes}, valid_session
-        response.should redirect_to(Thing.last)
+        response.should redirect_to(Thing.all.to_a.last)
       end
     end
 

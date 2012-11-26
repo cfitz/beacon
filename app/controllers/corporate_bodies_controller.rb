@@ -13,7 +13,9 @@ class CorporateBodiesController < ApplicationController
   # GET /corporate_bodies/1
   # GET /corporate_bodies/1.json
   def show
-    @corporate_body = CorporateBody.find(params[:id])
+    @corporate_body = CorporateBody.find_sluggable(params[:id])
+    
+
 
     respond_to do |format|
       format.html # show.html.erb
@@ -34,7 +36,7 @@ class CorporateBodiesController < ApplicationController
 
   # GET /corporate_bodies/1/edit
   def edit
-    @corporate_body = CorporateBody.find(params[:id])
+    @corporate_body = CorporateBody.find_sluggable(params[:id])
   end
 
   # POST /corporate_bodies
@@ -56,7 +58,7 @@ class CorporateBodiesController < ApplicationController
   # PUT /corporate_bodies/1
   # PUT /corporate_bodies/1.json
   def update
-    @corporate_body = CorporateBody.find(params[:id])
+    @corporate_body = CorporateBody.find_sluggable(params[:id])
 
     respond_to do |format|
       if @corporate_body.update_attributes(params[:corporate_body])
@@ -72,7 +74,7 @@ class CorporateBodiesController < ApplicationController
   # DELETE /corporate_bodies/1
   # DELETE /corporate_bodies/1.json
   def destroy
-    @corporate_body = CorporateBody.find(params[:id])
+    @corporate_body = CorporateBody.find_sluggable(params[:id])
     @corporate_body.destroy
 
     respond_to do |format|

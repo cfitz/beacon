@@ -1,6 +1,10 @@
 - model_class = Document
 .page-header
-  %h3=t '.title', :default => @document.title
+  %h3
+  
+    = link_to(:back) { content_tag(:i, '', :class => 'icon-arrow-left back-arrow')   }
+    =t '.title', :default => @document.title
+    
 
 .row-fluid
   .span3

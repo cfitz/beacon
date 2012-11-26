@@ -14,7 +14,7 @@ class PlacesController < ApplicationController
   # GET /places/1
   # GET /places/1.json
   def show
-    @place = Place.find(params[:id])
+    @place = Place.find_sluggable(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -35,7 +35,7 @@ class PlacesController < ApplicationController
 
   # GET /places/1/edit
   def edit
-    @place = Place.find(params[:id])
+    @place = Place.find_sluggable(params[:id])
   end
 
   # POST /places
@@ -57,7 +57,7 @@ class PlacesController < ApplicationController
   # PUT /places/1
   # PUT /places/1.json
   def update
-    @place = Place.find(params[:id])
+    @place = Place.find_sluggable(params[:id])
 
     respond_to do |format|
       if @place.update_attributes(params[:place])
@@ -73,7 +73,7 @@ class PlacesController < ApplicationController
   # DELETE /places/1
   # DELETE /places/1.json
   def destroy
-    @place = Place.find(params[:id])
+    @place = Place.find_sluggable(params[:id])
     @place.destroy
 
     respond_to do |format|

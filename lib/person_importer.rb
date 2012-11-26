@@ -41,6 +41,12 @@ class PersonImporter
         puts person.name
         person.has_membership << program
         person.has_membership_rels.first.member_type = "World Maritime University Alumni"
+        
+        
+        country = Place.find_or_create_by!(:name => country)
+        person.has_nationality << country
+      
+      
       
         person.save
       

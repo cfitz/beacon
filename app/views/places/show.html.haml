@@ -1,10 +1,13 @@
 - model_class = Place
 .page-header
-  %h1=t '.title', :default => model_class.model_name.human
+  %h1=t '.title', :default => "#{model_class.model_name.human} : #{@place.name}"
 
 %dl.dl-horizontal
   %dt= model_class.human_attribute_name(:name) + ':'
   %dd= @place.name
+  %dt= "People:"
+  - @place.members.each do |mem|
+    %dd= link_to( mem.name, person_path(mem) )
 - if current_user && current_user.admin?
   .form-actions
     = link_to t('.back', :default => t("helpers.links.back")), places_path, :class => 'btn'

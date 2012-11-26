@@ -1,3 +1,6 @@
+#
+# This is a neo4j relationship node that ties a person or corporate body to a document.
+# this relationship has a property that can denote the role type of the creator.
 class Creator < Neo4j::Rails::Relationship
   property :title, :role, :index => :exact
   

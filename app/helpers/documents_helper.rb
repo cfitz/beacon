@@ -9,7 +9,7 @@ module DocumentsHelper
     if item.url.include?("catalog.wmu")
       "<li><a href='#{item.url}'><i class='icon-book'></i><b>Koha Record</b></a></li>"
     elsif item.url.include?("docs.google.com")
-      if current_user or item.public?
+      if current_user # or item.public?
         "<li><a href='#{item.url}'><i class='icon-file'></i><b>PDF</b></a></li>"
       else
         "<li><b>PDF</b></li>"

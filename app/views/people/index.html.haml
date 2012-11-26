@@ -5,13 +5,19 @@
   %thead
     %tr
       %th= model_class.human_attribute_name(:name)
-      %th= model_class.human_attribute_name(:title)
+      %th= model_class.human_attribute_name(:nationality)
+      %th= model_class.human_attribute_name(:roles)
+      %th= model_class.human_attribute_name(:memberships)
       - if current_user && current_user.admin?
         %th=t '.actions', :default => t("helpers.actions")
   %tbody
     - @people.each do |person|
       %tr
         %td= link_to "#{person.name} (#{person.title})", person_path(person)
+        %td
+          %ul
+            - person.has_nationality.each do |rel|
+              %li= link_to rel.name, place_path(rel)
         %td
           %ul
             - person.documents_created_rels.each do |rel|

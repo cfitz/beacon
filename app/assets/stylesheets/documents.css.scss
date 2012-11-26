@@ -31,8 +31,11 @@
     a { 
       display: inline;
       padding: 1px 30px;
+      background-color: #F5F5F5;
+      width: 100%;
     }
-    span { 
+    a:hover { background-color: #F5F5F5;  }
+    span.badge { 
       float: right;
     }
   
@@ -63,3 +66,12 @@ ul.items_list b {
 }
 
 .span9 { iframe { min-height: 780px; width: 100% } }
+
+#results section {  border-bottom: 1px solid #666; clear: both } 
+section#result-part { margin: 10px; overflow: hidden; padding-bottom: 5px;
+  h3 { margin: 0; font-family: 'Telex', sans-serif; font-weight: bold; color: #317EAC;
+      text-rendering: optimizelegibility;
+      .manf-man { font-size: 10px; font-weight: normal; }
+  }
+  .short-desc { em {  color: #C09853; } }
+}

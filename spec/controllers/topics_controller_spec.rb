@@ -24,7 +24,7 @@ describe TopicsController do
   # Topic. As you add validations to Topic, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {}
+    { :name => "Foo Topic"}
   end
 
   # This should return the minimal set of values that should be in the session

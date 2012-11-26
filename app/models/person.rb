@@ -4,11 +4,12 @@ class Person < Neo4j::Rails::Model
   
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include Sluggable
   
   index :id
-  
-  
+
   property :name, :type => String, :index => :fulltext
+  property :slug, :index => :exact
   property :exact_name, :type => String, :index => :exact # this is to help us find the name
   property :title, :type => String, :index => :exact
   
@@ -29,6 +30,11 @@ class Person < Neo4j::Rails::Model
 
   has_n(:documents_created).from(Document.creators).relationship(Creator)
   has_n(:has_membership).to(CorporateBody).relationship(GroupMember)
+  has_n(:has_nationality).to(Place)
+  
+  validates :name, :presence => true
+  validate :ensure_named, :before => :create
+  
   
   mapping do
        indexes :name,  :analyzer => 'snowball', :boost => 100

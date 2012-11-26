@@ -58,7 +58,11 @@ i.icon-beacon {
   color: white;
 }
 
+
 .page-header h1 a:hover { color: #666; }
+
+.page-header i.back-arrow { font-size: 18px; } 
+
 
 
 .table .dl-horizontal dt {  width: 65px; }

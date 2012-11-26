@@ -24,19 +24,20 @@ describe ConceptsController do
   # Concept. As you add validations to Concept, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {}
+    { :name => "FooBar"}
   end
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # ConceptsController. Be sure to keep this updated too.
   def valid_session
-    {}
+    { }
   end
 
+describe 
   describe "GET index" do
     it "assigns all concepts as @concepts" do
-      concept = Concept.create! valid_attributes
+      concept =FactoryGirl.create(:concept) 
       get :index, {}, valid_session
       assigns(:concepts).should eq([concept])
     end
@@ -44,7 +45,7 @@ describe ConceptsController do
 
   describe "GET show" do
     it "assigns the requested concept as @concept" do
-      concept = Concept.create! valid_attributes
+      concept = FactoryGirl.create(:concept) 
       get :show, {:id => concept.to_param}, valid_session
       assigns(:concept).should eq(concept)
     end
@@ -58,18 +59,20 @@ describe ConceptsController do
   end
 
   describe "GET edit" do
+    login_admin
     it "assigns the requested concept as @concept" do
-      concept = Concept.create! valid_attributes
-      get :edit, {:id => concept.to_param}, valid_session
+      concept = FactoryGirl.create(:concept)
+      get :edit, {:id => concept.to_param }, valid_session
       assigns(:concept).should eq(concept)
     end
   end
 
   describe "POST create" do
     describe "with valid params" do
+      login_admin
       it "creates a new Concept" do
         expect {
-          post :create, {:concept => valid_attributes}, valid_session
+          post :create, { :concept => valid_attributes}, valid_session
         }.to change(Concept, :count).by(1)
       end
 
@@ -81,7 +84,7 @@ describe ConceptsController do
 
       it "redirects to the created concept" do
         post :create, {:concept => valid_attributes}, valid_session
-        response.should redirect_to(Concept.last)
+        response.should redirect_to(Concept.all.to_a.last)
       end
     end
 
@@ -105,7 +108,7 @@ describe ConceptsController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested concept" do
-        concept = Concept.create! valid_attributes
+        concept =FactoryGirl.create(:concept) 
         # Assuming there are no other concepts in the database, this
         # specifies that the Concept created on the previous line
         # receives the :update_attributes message with whatever params are
@@ -115,13 +118,13 @@ describe ConceptsController do
       end
 
       it "assigns the requested concept as @concept" do
-        concept = Concept.create! valid_attributes
+        concept =FactoryGirl.create(:concept) 
         put :update, {:id => concept.to_param, :concept => valid_attributes}, valid_session
         assigns(:concept).should eq(concept)
       end
 
       it "redirects to the concept" do
-        concept = Concept.create! valid_attributes
+        concept =FactoryGirl.create(:concept) 
         put :update, {:id => concept.to_param, :concept => valid_attributes}, valid_session
         response.should redirect_to(concept)
       end
@@ -129,7 +132,7 @@ describe ConceptsController do
 
     describe "with invalid params" do
       it "assigns the concept as @concept" do
-        concept = Concept.create! valid_attributes
+        concept =FactoryGirl.create(:concept) 
         # Trigger the behavior that occurs when invalid params are submitted
         Concept.any_instance.stub(:save).and_return(false)
         put :update, {:id => concept.to_param, :concept => {}}, valid_session
@@ -137,7 +140,7 @@ describe ConceptsController do
       end
 
       it "re-renders the 'edit' template" do
-        concept = Concept.create! valid_attributes
+        concept =FactoryGirl.create(:concept) 
         # Trigger the behavior that occurs when invalid params are submitted
         Concept.any_instance.stub(:save).and_return(false)
         put :update, {:id => concept.to_param, :concept => {}}, valid_session
@@ -148,14 +151,14 @@ describe ConceptsController do
 
   describe "DELETE destroy" do
     it "destroys the requested concept" do
-      concept = Concept.create! valid_attributes
+      concept =FactoryGirl.create(:concept) 
       expect {
         delete :destroy, {:id => concept.to_param}, valid_session
       }.to change(Concept, :count).by(-1)
     end
 
     it "redirects to the concepts list" do
-      concept = Concept.create! valid_attributes
+      concept =FactoryGirl.create(:concept) 
       delete :destroy, {:id => concept.to_param}, valid_session
       response.should redirect_to(concepts_url)
     end

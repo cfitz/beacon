@@ -5,9 +5,8 @@ module BeaconSearch
     end
       
     module ClassMethods
-      def elastic_search(params={})
-          
-           
+      
+      def elastic_search(params={})       
            page = params[:page] ? params[:page] : 1
            per_page = params[:per_page] ? params[:per_page] : 10
            request_facets = params[:facet] ? params[:facet].compact : []
@@ -27,15 +26,12 @@ module BeaconSearch
                  boolean do must { string request_query, :default_operator => "AND" } if request_query end
                  facet_filters.each { |ff| boolean  &ff }
                end
-               
-               defined_facets.each { |f| facet f.to_s do terms f.to_sym  end  }
-               
-               
+               defined_facets.each { |f| facet f.to_s do terms f.to_sym  end  } 
                 #raise to_json
                 # raise to_curl
           end #tire.search
           
-          
+    #      search.results.collect! { |d| d.load }
           
           return search
       

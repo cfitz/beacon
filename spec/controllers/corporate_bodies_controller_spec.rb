@@ -24,7 +24,7 @@ describe CorporateBodiesController do
   # CorporateBody. As you add validations to CorporateBody, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {}
+    {:name => "FooCorp"}
   end
 
   # This should return the minimal set of values that should be in the session
@@ -36,7 +36,7 @@ describe CorporateBodiesController do
 
   describe "GET index" do
     it "assigns all corporate_bodies as @corporate_bodies" do
-      corporate_body = CorporateBody.create! valid_attributes
+      corporate_body = FactoryGirl.create(:corporate_body) 
       CorporateBody.stub(:all).and_return([corporate_body])
       get :index, {}, valid_session
       assigns(:corporate_bodies).should eq([corporate_body])
@@ -45,7 +45,7 @@ describe CorporateBodiesController do
 
   describe "GET show" do
     it "assigns the requested corporate_body as @corporate_body" do
-      corporate_body = CorporateBody.create! valid_attributes
+      corporate_body = FactoryGirl.create(:corporate_body) 
       get :show, {:id => corporate_body.to_param}, valid_session
       assigns(:corporate_body).should eq(corporate_body)
     end
@@ -60,7 +60,7 @@ describe CorporateBodiesController do
 
   describe "GET edit" do
     it "assigns the requested corporate_body as @corporate_body" do
-      corporate_body = CorporateBody.create! valid_attributes
+      corporate_body = FactoryGirl.create(:corporate_body) 
       get :edit, {:id => corporate_body.to_param}, valid_session
       assigns(:corporate_body).should eq(corporate_body)
     end
@@ -68,6 +68,7 @@ describe CorporateBodiesController do
 
   describe "POST create" do
     describe "with valid params" do
+      login_admin
       it "creates a new CorporateBody" do
         expect {
           post :create, {:corporate_body => valid_attributes}, valid_session
@@ -106,7 +107,7 @@ describe CorporateBodiesController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested corporate_body" do
-        corporate_body = CorporateBody.create! valid_attributes
+        corporate_body = FactoryGirl.create(:corporate_body) 
         # Assuming there are no other corporate_bodies in the database, this
         # specifies that the CorporateBody created on the previous line
         # receives the :update_attributes message with whatever params are
@@ -116,13 +117,13 @@ describe CorporateBodiesController do
       end
 
       it "assigns the requested corporate_body as @corporate_body" do
-        corporate_body = CorporateBody.create! valid_attributes
+        corporate_body = FactoryGirl.create(:corporate_body) 
         put :update, {:id => corporate_body.to_param, :corporate_body => valid_attributes}, valid_session
         assigns(:corporate_body).should eq(corporate_body)
       end
 
       it "redirects to the corporate_body" do
-        corporate_body = CorporateBody.create! valid_attributes
+        corporate_body = FactoryGirl.create(:corporate_body) 
         put :update, {:id => corporate_body.to_param, :corporate_body => valid_attributes}, valid_session
         response.should redirect_to(corporate_body)
       end
@@ -130,7 +131,7 @@ describe CorporateBodiesController do
 
     describe "with invalid params" do
       it "assigns the corporate_body as @corporate_body" do
-        corporate_body = CorporateBody.create! valid_attributes
+        corporate_body = FactoryGirl.create(:corporate_body) 
         # Trigger the behavior that occurs when invalid params are submitted
         CorporateBody.any_instance.stub(:save).and_return(false)
         put :update, {:id => corporate_body.to_param, :corporate_body => {}}, valid_session
@@ -138,7 +139,7 @@ describe CorporateBodiesController do
       end
 
       it "re-renders the 'edit' template" do
-        corporate_body = CorporateBody.create! valid_attributes
+        corporate_body = FactoryGirl.create(:corporate_body) 
         # Trigger the behavior that occurs when invalid params are submitted
         CorporateBody.any_instance.stub(:save).and_return(false)
         put :update, {:id => corporate_body.to_param, :corporate_body => {}}, valid_session
@@ -149,14 +150,14 @@ describe CorporateBodiesController do
 
   describe "DELETE destroy" do
     it "destroys the requested corporate_body" do
-      corporate_body = CorporateBody.create! valid_attributes
+      corporate_body = FactoryGirl.create(:corporate_body) 
       expect {
         delete :destroy, {:id => corporate_body.to_param}, valid_session
       }.to change(CorporateBody, :count).by(-1)
     end
 
     it "redirects to the corporate_bodies list" do
-      corporate_body = CorporateBody.create! valid_attributes
+      corporate_body = FactoryGirl.create(:corporate_body) 
       delete :destroy, {:id => corporate_body.to_param}, valid_session
       response.should redirect_to(corporate_bodies_url)
     end

@@ -14,8 +14,8 @@ class ConceptsController < ApplicationController
   # GET /concepts/1
   # GET /concepts/1.json
   def show
-    @concept = Concept.find(params[:id])
-
+    @concept = Concept.find_sluggable(params[:id])
+   
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @concept }
@@ -35,14 +35,13 @@ class ConceptsController < ApplicationController
 
   # GET /concepts/1/edit
   def edit
-    @concept = Concept.find(params[:id])
+    @concept = Concept.find_sluggable(params[:id])
   end
 
   # POST /concepts
   # POST /concepts.json
   def create
     @concept = Concept.new(params[:concept])
-
     respond_to do |format|
       if @concept.save
         format.html { redirect_to @concept, notice: 'Concept was successfully created.' }
@@ -57,7 +56,7 @@ class ConceptsController < ApplicationController
   # PUT /concepts/1
   # PUT /concepts/1.json
   def update
-    @concept = Concept.find(params[:id])
+    @concept = Concept.find_sluggable(params[:id])
 
     respond_to do |format|
       if @concept.update_attributes(params[:concept])
@@ -73,7 +72,7 @@ class ConceptsController < ApplicationController
   # DELETE /concepts/1
   # DELETE /concepts/1.json
   def destroy
-    @concept = Concept.find(params[:id])
+    @concept = Concept.find_sluggable(params[:id])
     @concept.destroy
 
     respond_to do |format|

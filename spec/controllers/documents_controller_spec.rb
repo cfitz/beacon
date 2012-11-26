@@ -45,6 +45,19 @@ describe DocumentsController do
       get :show, {:id => document.to_param}
       assigns(:document).should eq(document)
     end
+    
+    it "assigns the requested document as @document using the prettyurl slug" do
+      document = Document.create!({ :title => "my document"} )
+      get :show, {:id => document.slug }
+      assigns(:document).should eq(document)
+    end
+  
+      it "not assign the requested document as @document if the prettyurl slug doesn't exists" do
+        document = Document.create!({ :title => "my document"} )
+        get :show, { :id => "foo_foo" }
+        assigns(:document).should_not eq(document)
+      end
+    
   end
 
   describe "GET new" do
@@ -82,7 +95,7 @@ describe DocumentsController do
 
       it "redirects to the created document" do
         post :create, {:document => valid_attributes}
-        response.should redirect_to(Document.last)
+        response.should redirect_to(Document.all.to_a.last)
       end
     end
 

@@ -1,14 +1,13 @@
 .page-header
   %h1=t '.title', :default => "Search Results"
-%table.table.table-striped
-  %thead
-    %tr
-      %th= "Name"
-      %th= "Type"
-  %tbody
-    - @search.results.each do |result|
-      %tr
-        %td= link_to result.name, result
-        %td= result.class
+%div{ :id => 'results', :class => "results-on" }
+  - @search.each do |result|
+    %section#result-part
+      %h4
+        = link_to result.name, result
+        = link_to result.class,  { :controller => result.class.to_s.downcase.pluralize }  , :class => "manf-man" 
+      - if result.respond_to?(:highlight) && result.highlight && result.highlight.content
+        %div.well
+          %p{ :class => "short-desc muted" }= result.highlight.content.first.html_safe
         
 = page_navigation_links @search

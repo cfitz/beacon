@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :person do
-    name "MyString"
-    title "MyString"
+    name "John Smith"
+    title "Sir"
   end
 end

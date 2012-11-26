@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :item do
-    uri "MyURI"
-    item_type "MyFormat"
+    url "http://beacon.io"
+    document {  Document.new }
   end
 end

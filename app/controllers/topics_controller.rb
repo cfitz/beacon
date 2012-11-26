@@ -1,4 +1,3 @@
-require 'will_paginate/array'
 class TopicsController < ApplicationController
   # GET /topics
   # GET /topics.json
@@ -23,7 +22,7 @@ class TopicsController < ApplicationController
   # GET /people/1
   # GET /people/1.json
   def show
-    @topic = Topic.find(params[:id])
+    @topic = Topic.find_sluggable(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

@@ -24,7 +24,7 @@ describe PlacesController do
   # Place. As you add validations to Place, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {}
+    { :name => "Foo Place"}
   end
 
   # This should return the minimal set of values that should be in the session
@@ -81,7 +81,7 @@ describe PlacesController do
 
       it "redirects to the created place" do
         post :create, {:place => valid_attributes}, valid_session
-        response.should redirect_to(Place.last)
+        response.should redirect_to(Place.all.to_a.last)
       end
     end
 
@@ -104,14 +104,15 @@ describe PlacesController do
 
   describe "PUT update" do
     describe "with valid params" do
+      login_admin
       it "updates the requested place" do
         place = Place.create! valid_attributes
         # Assuming there are no other places in the database, this
         # specifies that the Place created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Place.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, {:id => place.to_param, :place => {'these' => 'params'}}, valid_session
+        Place.any_instance.should_receive(:update_attributes).with({'name' => 'params'})
+        put :update, {:id => place.to_param, :place => {'name' => 'params'}}, valid_session
       end
 
       it "assigns the requested place as @place" do
