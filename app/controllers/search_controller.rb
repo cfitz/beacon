@@ -1,28 +1,36 @@
+require 'will_paginate/array'
+
 class SearchController < ApplicationController
 
 
   def index
-    
-     if !params[:search].blank?
-       term = params[:search]
+     default_indexes = ['documents', 'people', 'topics', 'places' ]
+     if !params[:q].blank?
+       
+       
+       
+       search_term = params[:q]
+       params[:type] ? indexes = params[:type] : default_indexes
        params[:page] ? page = params[:page].to_i : page = 1
        
        offset = ( ( page - 1) * 10)
-       search = Tire.search ['documents', 'people', 'concepts',  'places', 'things' ], :from => offset do 
+       search = Tire.search indexes, :load => false, :from => offset do 
           query do
             boolean do
-              must { text :_all, "#{term}*", :type => :phrase_prefix }
-              should { match :content, term, :type => :phrase}
+              should { match :name, "#{search_term}*", :type => :phrase_prefix }
+              should { match :content, search_term, :type => :phrase}
             end
           end
+          facet "item_type" do terms :_type end
           highlight :content, :title
           sort { by "_score"}
           
        end 
      
-       @search = search.results
+       @search = search.results       
        @search.results.collect! { |es_result| result = es_result.load; result.highlight = es_result.highlight if result.respond_to?(:highlight); result }
-     
+       @facets = @search.facets
+            
     else
       @search = []
     end

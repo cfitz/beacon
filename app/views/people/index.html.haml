@@ -13,15 +13,15 @@
   %tbody
     - @people.each do |person|
       %tr
-        %td= link_to "#{person.name} (#{person.title})", person_path(person)
+        %td= link_to "#{person.name}", person_path(person)
         %td
           %ul
             - person.has_nationality.each do |rel|
               %li= link_to rel.name, place_path(rel)
         %td
           %ul
-            - person.documents_created_rels.each do |rel|
-              %li= rel.role
+            - person.roles.each do |role|
+              %li= role.titleize
         %td
           %ul
             - person.has_membership_rels.each do |rel|

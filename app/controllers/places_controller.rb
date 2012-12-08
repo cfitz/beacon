@@ -2,8 +2,10 @@ class PlacesController < ApplicationController
   # GET /places
   # GET /places.json
   def index
-    @places = Place.all.paginate(:page => params[:page], :per_page => 10 )
+    params[:sort] ||= "slug:asc"
     
+    @places = Place.elastic_search params 
+    @facets = @places.facets
 
     respond_to do |format|
       format.html # index.html.erb

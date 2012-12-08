@@ -12,7 +12,7 @@ bindSearchTypeahead = (node) ->
       source: (typeahead, query) ->
         $.ajax(
           dataType: 'json',
-          url: "/search?search="+query
+          url: "/search?q="+query
           success: (data) => 
            typeahead.process(data)
         )

@@ -4,12 +4,11 @@
   
     = link_to(:back) { content_tag(:i, '', :class => 'icon-arrow-left back-arrow')   }
     =t '.title', :default => @document.title
-    
 
 .row-fluid
   .span3
     .well.sidebar-nav
-      %dl.dl-horizontal    
+      %ul.nav.nav-list   
         - @document.creators_by_roles.each_pair do |role, values|
           %dt=  "#{role.titleize}:"      
           %dd
@@ -24,14 +23,14 @@
 
         %dt= model_class.human_attribute_name(:items) + ":"
         %dd
-          = item_list(@document.items, "ul", nil)
- 
-        
-        %dt= model_class.human_attribute_name(:summary) + ':'
-        %dd= @document.summary
+          = item_list(@document.items, "ul", nil)    
+        -# 
+          %dt= model_class.human_attribute_name(:summary) + ':'
+          %dd= @document.summary
   .span9
     - if show_pdf?
-      = @document.pdf_item.embed
+      #document-viewer
+        = @document.pdf_item.embed
     - else
       .hero-unit
         %h1 Online Document Currently Not Available

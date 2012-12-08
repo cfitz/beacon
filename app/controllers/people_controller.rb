@@ -3,8 +3,10 @@ class PeopleController < ApplicationController
   # GET /people.json
   def index
     
-    params[:q].blank? ? @people = Person.all.paginate(:page => params[:page], :per_page => 10 ) : @people = Person.all("name: #{params[:q].split(" ").first}*", :type => :fulltext).asc(:name).paginate(:page => params[:page], :per_page => 10 )
-    
+   # params[:q].blank? ? @people = Person.all.paginate(:page => params[:page], :per_page => 10 ) : @people = Person.all("name: #{params[:q].split(" ").first}*", :type => :fulltext).asc(:name).paginate(:page => params[:page], :per_page => 10 )
+     @people = Person.elastic_search params 
+      @facets = @people.facets
+    puts @facets.inspect
       
     respond_to do |format|
       format.html # index.html.erb

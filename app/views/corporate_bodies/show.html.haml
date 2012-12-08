@@ -7,7 +7,8 @@
   %br
   = @corporate_body.name
 
-.form-actions
-  = link_to t('.back', :default => t("helpers.links.back")), corporate_bodies_path, :class => 'btn'
-  = link_to t('.edit', :default => t("helpers.links.edit")), edit_corporate_body_path(@corporate_body), :class => 'btn'
-  = link_to t('.destroy', :default => t("helpers.links.destroy")), corporate_body_path(@corporate_body), :method => "delete", :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')), :class => 'btn btn-danger'
+- if current_user && current_user.admin?
+  .form-actions
+    = link_to t('.back', :default => t("helpers.links.back")), corporate_bodies_path, :class => 'btn'
+    = link_to t('.edit', :default => t("helpers.links.edit")), edit_corporate_body_path(@corporate_body), :class => 'btn'
+    = link_to t('.destroy', :default => t("helpers.links.destroy")), corporate_body_path(@corporate_body), :method => "delete", :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')), :class => 'btn btn-danger'

@@ -21,8 +21,8 @@ namespace :beacon do
     end
     
     task :all  => :environment do 
-      Rake::Task["beacon:import:documents"].invoke
       Rake::Task["beacon:import:people"].invoke
+      Rake::Task["beacon:import:documents"].invoke
       Rake::Task["beacon:import:index"].invoke
 
     end

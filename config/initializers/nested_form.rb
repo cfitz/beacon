@@ -14,7 +14,7 @@ module NestedForm
       if object.class._decl_rels[association.to_sym] && object.class._decl_rels[association.to_sym].target_class
         model_object = object.class._decl_rels[association.to_sym].target_class.new      
       else
-        model_object = Concept.new
+        model_object = Topic.new
       end
       
       blueprint = fields_for(association, model_object, :child_index => "new_#{association}", &@fields[association])

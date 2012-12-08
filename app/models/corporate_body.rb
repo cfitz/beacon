@@ -23,7 +23,7 @@ class CorporateBody < Neo4j::Rails::Model
   validate :ensure_named, :before => :create
   
   mapping do
-      indexes :name, analyzer: 'snowball', boost: 100
+      indexes :name, analyzer: 'snowball', boost: 1000
   end
   
   

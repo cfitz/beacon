@@ -46,7 +46,7 @@ namespace :deploy do
         from = source.next_revision(current_revision)
         logger.info "cd #{latest_release} && #{source.local.log(from)} vendor/assets/ app/assets/ | wc -l"
         if capture("cd #{latest_release} && #{source.local.log(from)} vendor/assets/ app/assets/ | wc -l").to_i > 0
-          logger.info "Doing the precompile thing"
+          logger.info "Doing the precompile jig"
           run %Q{cd #{latest_release} && #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile}
         else
           logger.info "Skipping asset pre-compilation because there were no asset changes"

@@ -32,10 +32,7 @@ class Document < Neo4j::Rails::Model
   has_n(:creators).relationship(Creator)  
   #.from(:Person, :created_work )
   has_n(:items).to(Item).relationship(WorkItem)
-  has_n(:pages).from(:Page)
-  has_n(:sections).from(:Section)
-  has_n(:annotations).from(:Annotation)
-  
+ 
   has_n(:topics).to(Topic)
   
   #accepts_nested_attributes_for :creators, :allow_destroy_relationship => true, :reject_if => proc { |attributes| attributes['id'].blank? && attributes['name'].blank? }
@@ -51,8 +48,14 @@ class Document < Neo4j::Rails::Model
    "Untitled Document"
   end
   
+  
+  def default_values
+    self.uuid ||= SecureRandom.urlsafe_base64
+  end
+  
+  
   def self.facets
-      [ :format, :program_facets ]
+      [ :format_facet, :world_maritime_university_program_facet, :date, :creator_nationality_facet ]
   end
 
 
@@ -60,14 +63,17 @@ class Document < Neo4j::Rails::Model
   mapping do
       indexes :topics, :type => 'string'
       indexes :title, analyzer: 'snowball', boost: 100
+      indexes :name, analyzer: 'snowball', boost: 100
+      
       indexes :content, analyzer: 'snowball', boost: 50
-      indexes :topic_facets, :type => 'string', :index => :not_analyzed
-      indexes :program_facets, :type => 'string', :index => :not_analyzed
+      
+      indexes :format_facet, :type => "string", :index =>"not_analyzed"
+      indexes :world_maritime_university_program_facet, :type => "string", :index => "not_analyzed"
+      indexes :date, :type => "string", :index => "not_analyzed"
+      indexes :creator_nationality_facet, :type => "string", :index =>"not_analyzed"
+
   end
 
-  def default_values
-    self.uuid ||= SecureRandom.urlsafe_base64
-  end
 
 
   
@@ -75,13 +81,17 @@ class Document < Neo4j::Rails::Model
   def to_indexed_json
          json = {
             :title   => title,
+            :name   => name,
             :content => content,
             :summary => summary,
-            :topic_facets => topics.collect { |t| t.name },
-            :program_facets => programs,
-            :creators => creators.collect { |c| c.name },
             :topics => topics.collect { |t| t.name },
-            :items => items.collect { |i| i.url }
+            :creators => creators.collect { |c| c.name },
+            :items => items.collect { |i| i.url },
+            
+            :format_facet => items.collect { |i| i.item_type},
+            :world_maritime_university_program_facet => programs,
+            :creator_nationality_facet => creator_countries,
+                        
           }
           json[:date] = date if date
           json.to_json
@@ -185,6 +195,14 @@ class Document < Neo4j::Rails::Model
     programs.collect! { |p| p.has_membership.to_a }.flatten!
     programs.collect! { |p| p.name }
     programs.uniq
+  end
+  
+  # this returns an array of all the countries represented by the creators
+  def creator_countries
+    countries = self.creators.to_a
+    countries.collect! { |c| c.has_nationality.to_a }.flatten!
+    countries.collect! { |c| c.name }
+    countries.uniq
   end
 
 

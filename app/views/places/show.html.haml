@@ -8,6 +8,9 @@
   %dt= "People:"
   - @place.members.each do |mem|
     %dd= link_to( mem.name, person_path(mem) )
+  %dt= "Documents:"
+  - @place.documents.each do |doc|
+    %dd= link_to( doc.title, document_path(doc) )
 - if current_user && current_user.admin?
   .form-actions
     = link_to t('.back', :default => t("helpers.links.back")), places_path, :class => 'btn'

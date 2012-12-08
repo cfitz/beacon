@@ -1,13 +1,15 @@
 .page-header
   %h1=t '.title', :default => "Search Results"
-%div{ :id => 'results', :class => "results-on" }
+.results-list
   - @search.each do |result|
-    %section#result-part
-      %h4
+    .result-item.row-fluid
+      .span12.title-container
+        = link_to result.class,  { :controller => result.class.to_s.downcase.pluralize }  , :class => "search-result-type" 
         = link_to result.name, result
-        = link_to result.class,  { :controller => result.class.to_s.downcase.pluralize }  , :class => "manf-man" 
+       
       - if result.respond_to?(:highlight) && result.highlight && result.highlight.content
-        %div.well
-          %p{ :class => "short-desc muted" }= result.highlight.content.first.html_safe
+        .span11
+          %div.well
+            %p{ :class => "short-desc muted" }= result.highlight.content.first.split(" ")[0..100].join(" ").html_safe
         
 = page_navigation_links @search

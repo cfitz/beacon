@@ -7,13 +7,9 @@ module DocumentsHelper
   # this takes an item and makes the proper li for it. this is ugly as hell. 
   def render_list_item(item)
     if item.url.include?("catalog.wmu")
-      "<li><a href='#{item.url}'><i class='icon-book'></i><b>Koha Record</b></a></li>"
+      "<li><a href='#{item.url}'><i class='icon-book'></i></a></li>"
     elsif item.url.include?("docs.google.com")
-      if current_user # or item.public?
-        "<li><a href='#{item.url}'><i class='icon-file'></i><b>PDF</b></a></li>"
-      else
-        "<li><b>PDF</b></li>"
-      end
+        "<li><a href='#{item.url}'><i class='icon-file'></i></a></li>"
     elsif !item.url.include?("missing") # paperclip has a url of 'missing.pgn' if there isn't an attachment
       "<li><a href='#{item.url}'><i class='icon-file'></i><b>External Link</b></a></li>"
     else

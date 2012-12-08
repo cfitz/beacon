@@ -3,17 +3,11 @@ Beacon::Application.routes.draw do
 
   get "home/index"
 
-  resources :things
   resources :places
   resources :events
   resources :corporate_bodies
-  resources :concepts
   resources :topics
-  resources :sections
   resources :people
-  resources :annotations
-  resources :pages
-
   resources :items
   
   resources :documents do
@@ -27,7 +21,8 @@ Beacon::Application.routes.draw do
     resources :users
   end
 
-
+  match 'facets/:model/:request_facet' => 'facets#index', :via => [:get]
+  
  # root :to => 'documents#index'
   root :to => 'home#index'
   # The priority is based upon order of creation:
