@@ -124,7 +124,15 @@ class DocumentImporter
       work.save 
         
       places.uniq!
-      places.each { |place| work.topics << Place.find_or_create_by!(:name => place ); }
+      places.each do |place| 
+        search = Place.search(place)
+        if search.results.first and search.results.first.name
+          found_place = search.results.first.load
+          work.topics << found_place
+        else
+          puts "NOT FOUND => #{place}"
+        end
+      end
 
       topics.uniq!
       topics.each do |topic| 

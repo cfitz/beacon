@@ -5,12 +5,18 @@
   %thead
     %tr
       %th= model_class.human_attribute_name(:name)
+      %th= model_class.human_attribute_name(:place_type)
+      %th= model_class.human_attribute_name(:continents)
       - if current_user && current_user.admin?
         %th=t '.actions', :default => t("helpers.actions")
   %tbody
     - @places.each do |place|
       %tr
         %td= link_to place.name, place_path(place)
+        %td= place.place_type.titleize if place.place_type
+        %td
+          - place.belongs_to_continents.each do |continent|
+            = "#{continent.titleize} "
         %td
           - if current_user && current_user.admin?   
             = link_to t('.edit', :default => t("helpers.links.edit")), edit_place_path(place), :class => 'btn btn-mini'

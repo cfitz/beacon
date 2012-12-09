@@ -45,6 +45,8 @@ class Person < Neo4j::Rails::Model
   
   mapping do
        indexes :name,  :analyzer => 'snowball', :boost => 100
+       indexes :name_sort, :type => "string", :index => "not_analyzed"
+       
        indexes :world_maritime_university_program_facet, :type => "string", :index => "not_analyzed"
        indexes :nationality_facet, :type => "string", :index =>"not_analyzed"
        indexes :role_facet, :type => "string", :index => "not_analyzed"
@@ -54,7 +56,8 @@ class Person < Neo4j::Rails::Model
   # this configures how tire indexs into Elastic Search
   def to_indexed_json
          json = {
-            :name   => name,  
+            :name   => name,
+            :name_sort => name,   
             :world_maritime_university_program_facet => self.has_membership.collect { |p| p.name }, 
             :nationality_facet => self.has_nationality.collect { |n| n.name },
             :role_facet => self.roles.collect { |r| r.titleize }        

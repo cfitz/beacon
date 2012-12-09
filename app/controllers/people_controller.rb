@@ -4,9 +4,10 @@ class PeopleController < ApplicationController
   def index
     
    # params[:q].blank? ? @people = Person.all.paginate(:page => params[:page], :per_page => 10 ) : @people = Person.all("name: #{params[:q].split(" ").first}*", :type => :fulltext).asc(:name).paginate(:page => params[:page], :per_page => 10 )
-     @people = Person.elastic_search params 
-      @facets = @people.facets
-    puts @facets.inspect
+   params[:sort] ||= "name_sort:desc"
+   
+   @people = Person.elastic_search params 
+   @facets = @people.facets
       
     respond_to do |format|
       format.html # index.html.erb

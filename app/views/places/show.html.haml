@@ -3,8 +3,8 @@
   %h1=t '.title', :default => "#{model_class.model_name.human} : #{@place.name}"
 
 %dl.dl-horizontal
-  %dt= model_class.human_attribute_name(:name) + ':'
-  %dd= @place.name
+  %dt= model_class.human_attribute_name(:place_type) + ':'
+  %dd= @place.place_type.titleize
   %dt= "People:"
   - @place.members.each do |mem|
     %dd= link_to( mem.name, person_path(mem) )

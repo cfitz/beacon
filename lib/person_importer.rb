@@ -72,17 +72,15 @@ class PersonImporter
         
         
         #country = search_or_create(Place, country, true)
-        country = Place.find_by_name(country_name)
-        unless country
-          country = Place.create!(:name => country_name)
+        search = Place.search(country_name)
+        if search.results.first && search.results.first.name
+          country = search.results.first.load
+          person.has_nationality << country
+        else
+          puts "NOT FOUND => #{country_name}"
         end
-        
-        person.has_nationality << country
-      
-      
-      
+          
         person.save
-        country.save
         program.save
         
         

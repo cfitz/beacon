@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-gem 'jruby-openssl'
+gem 'jruby-openssl', '0.7.7'
 
 gem 'rails', '3.2.3'
 
@@ -10,8 +10,8 @@ gem 'neo4j'
 #gem 'neo4j-core', :git => 'git://github.com/andreasronge/neo4j-core.git'
 gem "torquebox-rake-support"
 #gem 'devise', "2.0.4"
-#gem 'devise-neo4j', :git => "git@github.com:cfitz/devise-neo4j.git"
-gem 'devise-neo4j', :path => "/Users/chrisfitzpatrick/code/devise-neo4j"
+gem 'devise-neo4j', :git => "git@github.com:cfitz/devise-neo4j.git", :branch => 'devise2'
+#gem 'devise-neo4j', :path => "/Users/chrisfitzpatrick/code/devise-neo4j"
 gem 'devise'
 gem 'omniauth-google-oauth2'
 gem 'marc'
@@ -29,6 +29,7 @@ gem 'google_drive'
 group :test, :development do
 #  gem 'neo4j-admin', :git => "git://github.com/andreasronge/neo4j-admin.git"
    gem 'torquebox', '2.1.0'
+   gem 'torquebox-capistrano-support'
    gem 'rspec-rails','2.11.0'
    gem 'guard-rspec','0.5.5'
    gem 'autotest-rails'
@@ -56,7 +57,8 @@ group :assets do
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyrhino'
   gem "less-rails"
-  gem 'twitter-bootstrap-rails', :git => "git://github.com/seyhunak/twitter-bootstrap-rails.git"
+  gem 'twitter-bootstrap-rails'
+  #, :git => "git://github.com/seyhunak/twitter-bootstrap-rails.git"
   #, :branch => "static"
 	
   gem 'sass-rails',   '~> 3.2.3'
@@ -79,7 +81,7 @@ gem 'jquery-rails'
 # gem 'unicorn'
 
 # Deploy with Capistrano
-# gem 'capistrano'
+gem 'capistrano'
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
