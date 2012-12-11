@@ -1,6 +1,5 @@
 class Person < Neo4j::Rails::Model
   
-  before_save :index_exact_name
   
   include Tire::Model::Search
   include Tire::Model::Callbacks
@@ -10,9 +9,8 @@ class Person < Neo4j::Rails::Model
   
   index :id
 
-  property :name, :type => String, :index => :fulltext
+  property :name, :type => String, :index => :exact
   property :slug, :index => :exact
-  property :exact_name, :type => String, :index => :exact # this is to help us find the name
   property :title, :type => String, :index => :exact
   
   property :alt_id, :type => String, :index => :exact
@@ -83,15 +81,5 @@ class Person < Neo4j::Rails::Model
 
 
  
- 
- private
- 
- def index_exact_name
-    if self.name.blank?
-      self.name = self.exact_name
-    else
-      self.exact_name = self.name 
-    end
-  end
   
 end

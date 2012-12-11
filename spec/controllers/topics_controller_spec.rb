@@ -39,9 +39,8 @@ describe TopicsController do
       doc = Document.create
       place = Place.create!( :name => "aplace" )
       person = Person.create!( :name => "aperson")
-      thing = Thing.create!(:name => "athing")
       
-      doc.topics << person << place << thing
+      doc.topics << person << place
       doc.save
       
       get :index, {}, valid_session  

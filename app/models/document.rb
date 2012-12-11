@@ -64,7 +64,7 @@ class Document < Neo4j::Rails::Model
       indexes :topics, :type => 'string'
       indexes :title, analyzer: 'snowball', boost: 100
       indexes :name, analyzer: 'snowball', boost: 100
-      
+      indexes :name_sort, :type => "string", :index => "not_analyzed"
       indexes :content, analyzer: 'snowball', boost: 50
       
       indexes :format_facet, :type => "string", :index =>"not_analyzed"
@@ -82,6 +82,7 @@ class Document < Neo4j::Rails::Model
          json = {
             :title   => title,
             :name   => name,
+            :name_sort => name,
             :content => content,
             :summary => summary,
             :topics => topics.collect { |t| t.name },
@@ -122,7 +123,7 @@ class Document < Neo4j::Rails::Model
       if k.include?("new") # this is a newly added relationship
         unless destroy
           self.save #first we need to persist the document. 
-          creator = v["class"].constantize.find_or_create_by(:exact_name => v["end_node_name"])
+          creator = v["class"].constantize.find_or_create_by(:name => v["end_node_name"])
           creator_role = Creator.new(:creators, self, creator, {:role => v["role"] })
           creator_role.save
         end

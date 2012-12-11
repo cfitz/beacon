@@ -34,15 +34,7 @@ describe PeopleController do
     {}
   end
 
-  describe "GET index" do
-    it "assigns all people as @people" do
-      person = FactoryGirl.build(:person)
-      Person.stub(:all).and_return([person])
-      get :index, {}, valid_session
-      assigns(:people).should eq([person])
-    end
-  end
-
+  
   describe "GET show" do
     it "assigns the requested person as @person" do
       person = FactoryGirl.create(:person)

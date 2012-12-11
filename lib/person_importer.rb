@@ -27,7 +27,7 @@ class PersonImporter
   
   def process
     
-    @wmu = CorporateBody.find_by_exact_name("World Maritime University")
+    @wmu = CorporateBody.find( :name => "World Maritime University")
     unless @wmu
       @wmu = CorporateBody.create!(:name => "World Maritime University")
     end
@@ -59,7 +59,7 @@ class PersonImporter
 #        person.save
 #      end
       
-        program = CorporateBody.find_by_exact_name(program_name)
+        program = CorporateBody.find( :name => program_name)
         unless program
           program =  CorporateBody.create!(:name => program_name)
           puts "new program => #{program.name}"

@@ -11,16 +11,17 @@
         %th=t '.actions', :default => t("helpers.actions")
   %tbody
     - @places.each do |place|
-      %tr
-        %td= link_to place.name, place_path(place)
-        %td= place.place_type.titleize if place.place_type
-        %td
-          - place.belongs_to_continents.each do |continent|
-            = "#{continent.titleize} "
-        %td
-          - if current_user && current_user.admin?   
-            = link_to t('.edit', :default => t("helpers.links.edit")), edit_place_path(place), :class => 'btn btn-mini'
-            = link_to t('.destroy', :default => t("helpers.links.destroy")), place_path(place), :method => :delete, :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')), :class => 'btn btn-mini btn-danger'
+      - unless place.nil?
+        %tr
+          %td= link_to place.name, place_path(place) if place.name
+          %td= place.place_type.titleize if place.place_type
+          %td
+            - place.belongs_to_continents.each do |continent|
+              = "#{continent.titleize} "
+          %td
+            - if current_user && current_user.admin?   
+              = link_to t('.edit', :default => t("helpers.links.edit")), edit_place_path(place), :class => 'btn btn-mini'
+              = link_to t('.destroy', :default => t("helpers.links.destroy")), place_path(place), :method => :delete, :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')), :class => 'btn btn-mini btn-danger'
 
 - if current_user && current_user.admin?
   = link_to t('.new', :default => t("helpers.links.new")), new_place_path, :class => 'btn btn-primary'

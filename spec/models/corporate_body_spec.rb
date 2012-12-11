@@ -14,6 +14,11 @@ describe CorporateBody do
     @cb.name = nil
     @cb.should_not be_valid
  end
+ 
+ it "should have some added methods to make the form work" do
+   @cb._destroy.should be_false
+   @cb._new.should be_false
+ end
 
  
  

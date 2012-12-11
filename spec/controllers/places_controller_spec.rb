@@ -34,13 +34,6 @@ describe PlacesController do
     {}
   end
 
-  describe "GET index" do
-    it "assigns all places as @places" do
-      place = Place.create! valid_attributes
-      get :index, {}, valid_session
-      assigns(:places).should eq([place])
-    end
-  end
 
   describe "GET show" do
     it "assigns the requested place as @place" do

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Document do
 
   it "should return an array of facets" do
-    Document.facets.should == [:format, :program_facets]
+    Document.facets.should == [:format_facet, :world_maritime_university_program_facet, :date, :creator_nationality_facet] 
   end
   
   it "should return a propertly formated json to be indexed by elasticsearhc" do
@@ -11,9 +11,7 @@ describe Document do
     document.creators << FactoryGirl.create(:person)
     document.items << Item.new(:url => "http://google.com", :item_type => "pdf")
     document.topics << Topic.new(:name => "Testing Rails")
-    document.to_indexed_json.should == {"title"=>"MyString","content" => nil, "summary"=>"MyString",
-      "topic_facets"=>["Testing Rails"],"program_facets"=>[],"creators"=>["John Smith"],"topics"=>["Testing Rails"],
-      "items"=>["http://google.com"],"date" =>"2012-07-21"}.to_json
+    document.to_indexed_json.should == {"title"=>"MyString","name"=>"MyString","content"=>nil,"summary"=>"MyString","topics"=>["Testing Rails"],"creators"=>["John Smith"],"items"=>["http://google.com"],"format_facet"=>["pdf"],"world_maritime_university_program_facet"=>[],"creator_nationality_facet"=>[],"date"=>"2012-07-21"}.to_json
   end
   
   it "should return a hash of the creators and their roles" do

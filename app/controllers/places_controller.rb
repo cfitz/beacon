@@ -2,7 +2,7 @@ class PlacesController < ApplicationController
   # GET /places
   # GET /places.json
   def index
-    params[:sort] ||= "slug:asc"
+    params[:sort] ||= "name_sort:asc"
     
     @places = Place.elastic_search params 
     @facets = @places.facets

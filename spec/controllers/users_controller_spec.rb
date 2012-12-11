@@ -57,7 +57,6 @@ describe UsersController do
  
       describe "#show non-admin" do
          login_user
-
          it "should not allow non-admin users to see the page" do
            get :show, :id=> 1
            response.should redirect_to('/')
@@ -107,5 +106,33 @@ describe UsersController do
          end
    
    
+       describe "DELETE destroy as admin" do
+         login_admin
+         
+          it "destroys the requested user" do
+            expect {
+              delete :destroy, {:id => @user.to_param}
+            }.to change(User, :count).by(-1)
+          end
+
+          it "redirects to the user list" do
+            delete :destroy, {:id => @user.to_param}
+            response.should redirect_to(users_url)
+          end
+        end
+ 
+      describe "DELETE destroy as non-admin" do
+          it "destroys the requested user" do
+            expect {
+              delete :destroy, {:id => 1 }
+            }.to_not change(User, :count).by(-1)
+          end
+
+          it "redirects to the user list" do
+            delete :destroy, {:id => 1 }
+            response.should redirect_to("/")
+          end
+      end
+ 
    
 end

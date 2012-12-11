@@ -6,7 +6,7 @@ class DocumentsController < ApplicationController
   # GET /documents
   # GET /documents.json
   def index
-  
+    params[:sort] ||= "name_sort:asc"
     @documents = Document.elastic_search params 
     @facets = @documents.facets
    
