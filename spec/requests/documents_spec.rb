@@ -12,12 +12,6 @@ describe "Documents" do
       get documents_path
       response.status.should be(200)
       Document.tire.index.delete
-    
-    
-    
-    
-    
-    
     end
   end
 end

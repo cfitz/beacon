@@ -41,6 +41,20 @@ describe PeopleController do
       get :show, {:id => person.to_param}, valid_session
       assigns(:person).should eq(person)
     end
+    
+    it "gets the person even if the slug is not found" do
+        person = FactoryGirl.create(:person)
+        get :show, {:id => person.id }, valid_session
+        assigns(:person).should eq(person)
+    end
+    
+      it "gets the person even if the slug is not found" do
+        Person.should_receive(:find_sluggable).and_return(nil)
+        Person.should_receive(:find).and_raise(Java::JavaLang::RuntimeException.new)
+           get :show, {:id => "666" }, valid_session 
+          assigns(:person).should eq(nil)
+      end
+    
   end
 
   describe "GET new" do

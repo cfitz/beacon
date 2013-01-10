@@ -1,9 +1,9 @@
 ## this gets the facets for a specific model
 
 # refactor this out. we should make this in the specific klass controllers...
-
 class FacetsController < ApplicationController
   # GET /facets/:model/:facet => /facets/people/nationality_facet
+=begin
   def index
     klass = params[:model]
     request_facet = params[:request_facet]
@@ -15,6 +15,5 @@ class FacetsController < ApplicationController
          format.html # index.html.erb
     end
     
-    
-  end
+=end
 end

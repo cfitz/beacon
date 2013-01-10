@@ -19,14 +19,12 @@ class ItemsController < ApplicationController
   def show
     @item = Item.find(params[:id])
     
-    if params[:url]
-      enforce_aws_permissions( params[:url] )
-    else
-      respond_to do |format|
-        format.html # show.html.erb
-        format.json { render json: @item }
-      end
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @item }
     end
+  
   end
   
   

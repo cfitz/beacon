@@ -6,7 +6,7 @@ class DocumentsController < ApplicationController
   # GET /documents
   # GET /documents.json
   def index
-    params[:sort] ||= "name_sort:asc"
+ #   params[:sort] ||= "name_sort:asc"
     @documents = Document.elastic_search params 
     @facets = @documents.facets
    
@@ -93,7 +93,8 @@ class DocumentsController < ApplicationController
     end
   end
   
-  
+=begin  
+  Currently not implimented, but might use? 
   def show_creator_relation
     @document = Document.find_sluggable(params[:document_id])
     @creator = @document.creators.find(params[:person_id])
@@ -114,18 +115,8 @@ class DocumentsController < ApplicationController
       end
     end
   end
+=end
   
-  
-  private
-  
-  
-  def document_access_control 
-      if current_user or @document.pdf_item.open_access
-        render json: @document.pdf_item.to_document_json
-      else
-        render json: { :error => "Access Denied"}.to_json
-      end
-  end
  
   
   

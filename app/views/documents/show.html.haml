@@ -28,7 +28,7 @@
           %dt= model_class.human_attribute_name(:summary) + ':'
           %dd= @document.summary
   .span9
-    - if show_pdf?
+    - if show_pdf?(@document)
       #document-viewer
         = @document.pdf_item.embed
     - else

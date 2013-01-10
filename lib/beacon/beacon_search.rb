@@ -1,58 +1,94 @@
 module BeaconSearch
+    extend ActiveSupport::Concern
     
-    def self.included(base)
-        base.extend(ClassMethods)
+    included do
+        include Tire::Model::Search
+        include Tire::Model::Callbacks
     end
       
     module ClassMethods
       
+      # this is used when searching for a 
       def elastic_search(params={})
+          params = format_params(params)
+          search = self.tire.search(:page => params[:page], :per_page => params[:per_page], :load=> params[:load_models] ) do
+               query do
+                 boolean do must { string params[:request_query], :default_operator => "AND" } if params[:request_query] end
+                 params[:facet_filters].each { |ff| boolean  &ff }
+               end
+               params[:facet_query].each_pair { |f, size| facet f.to_s do terms f.to_sym, :size => size   end  } 
+               # raise to_json  #for debugging
+               # raise to_curl # for debugging
+               
+               if params[:sort_by] && params[:order_by]
+                 sort { by params[:sort_by].to_sym, params[:order_by] }
+               end 
+               
+          end #tire.search
+    #      search.results.collect! { |d| d.load }
+          return search
+      end #elastic_search
+      
+      
+      # this is used to search across multiple indexes
+      def multi_index_elastic_search(params={})
+        params = format_params(params)
+        
+        search = Tire.search params[:indexes], :load => false, :from => params[:offset] do 
+            query do
+              boolean do
+                should { match :name, "#{params[:q]}*", :type => :phrase_prefix }
+                should { match :content, params[:q], :type => :phrase}
+              end
+            end
+            facet "item_type" do terms :_type end
+            highlight :content, :title
+            sort { by "_score"}
+
+         end
+      end
+      
+      # a real nasty method to format request paramters to pass on to the elastic_search
+      def format_params(params)
+         params[:load_models] ||= true
+        
+         # this is just used for multi_index search
+         params[:indexes] ||= ['documents', 'people', 'topics', 'places' ]
+         
+        
+         # return loaded models?
+          params[:load] ||= true
          
          # will_paginate settings
-         page = params[:page] ? params[:page] : 1
-         per_page = params[:per_page] ? params[:per_page] : 25
+        params[:page] ||= 1
+        params[:per_page] ||=  25
+        params[:offset] =  ( ( params[:page] - 1) * 10)
 
          # sort by
-         sort_by, order_by = params[:sort].split(":") if params[:sort]
-
-         order_by = "desc" unless order_by == "asc"
+         params[:sort_by], params[:order_by] = params[:sort].split(":") if params[:sort]
+         params[:order_by] = "desc" unless params[:order_by] == "asc"
 
          # facet filters and query
-         limit_facets = params[:facet] ? params[:facet].compact : []
-         request_query = params[:q] ? params[:q].compact : "*"
+         params[:facet] ||= []
+         params[:facet].compact!
+
+         params[:request_query] = params[:q] ? params[:q].compact : "*"
          
          # facet filtering/limits
-         facet_filters = limit_facets.collect do |f|
+         params[:facet_filters] = params[:facet].collect do |f|
            facet, value = f.split(":")
            lambda { |boolean| boolean.must { term facet.to_sym, value } }
          end
          
           # facets to be returned
-          request_facets = params[:request_facet] ? params[:request_facet] : self.facets
-          facet_query = {} 
-          request_facets.each { |f| facet_query[f] = params[:"#{f}_page"] ? ( ( params[:"#{f}_page"].to_i * 10 ) + 1 ) : 11  }
+          params[:request_facets] ||= self.facets
+          params[:facet_query] = {} 
+          params[:request_facets].each { |f| params[:facet_query][f] = params[:"#{f}_page"] ? ( ( params[:"#{f}_page"].to_i * 10 ) + 1 ) : 11  }
           
-          
-          search = self.tire.search(:page => page, :per_page => per_page, :load=> true) do
-               query do
-                 boolean do must { string request_query, :default_operator => "AND" } if request_query end
-                 facet_filters.each { |ff| boolean  &ff }
-               end
-               facet_query.each_pair { |f, size| facet f.to_s do terms f.to_sym, :size => size   end  } 
-               # raise to_json  #for debugging
-               # raise to_curl # for debugging
-               
-               if sort_by && order_by
-                 sort { by sort_by.to_sym, order_by }
-               end 
-               
-          end #tire.search
-          
-    #      search.results.collect! { |d| d.load }
-          
-          return search
+          return params
+        end #format_params
       
-      end #elastic_search
+      
     end #ClassMethods
   
 end #beacon

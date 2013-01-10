@@ -30,12 +30,21 @@ describe DocumentsController do
 
   describe "GET index" do
     it "assigns all documents as @documents" do
-      pending "need to fix this to work with Tire"
+  #    pending "need to fix this to work with Tire"
       document = Document.create! valid_attributes
-    
       get :index
-      assigns(:documents).should eq([document])
+      assigns(:documents).should be_an_instance_of(Tire::Results::Collection)
     end
+    
+    it "returns facets if passed into the params" do
+      Document.tire.index.delete
+      document = Document.create!( :date => "2012" )
+      get :index
+      assigns(:facets).should eq({"format_facet"=>{"_type"=>"terms", "missing"=>0, "total"=>0, "other"=>0, "terms"=>[]}, "world_maritime_university_program_facet"=>{"_type"=>"terms", "missing"=>0, "total"=>0, "other"=>0, "terms"=>[]}, "date"=>{"_type"=>"terms", "missing"=>0, "total"=>0, "other"=>0, "terms"=>[]}, "creator_nationality_facet"=>{"_type"=>"terms", "missing"=>0, "total"=>0, "other"=>0, "terms"=>[]}}) 
+      
+    end
+    
+    
   end
 
 
@@ -67,6 +76,15 @@ describe DocumentsController do
       get :new
       assigns(:document).should be_a_new(Document)
     end
+  end
+  
+  describe "GET new not logged in" do
+    it "should redirect me if I'm not logged in" do
+      get :new
+      response.should redirect_to("/")
+      flash[:notice].should == "You currently do not have permissions to view this section. If this is an error, please contact the system administrator."
+    end
+    
   end
 
   describe "GET edit" do

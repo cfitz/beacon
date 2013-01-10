@@ -25,7 +25,7 @@ class Item < Neo4j::Rails::Model
   
   
   def name
-    self.item_type.empty? ? "View Document" : self.item_type
+    self.item_type.blank? ? "View Document" : self.item_type
   end
 
   def title
@@ -38,10 +38,6 @@ class Item < Neo4j::Rails::Model
 
   def _destroy
     false
-  end
-  
-  def basedir
-    self.url.gsub(self.url.split("/").last, "").chomp("/")
   end
   
 end

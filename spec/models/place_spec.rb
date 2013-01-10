@@ -7,7 +7,6 @@ describe Place do
   end
 
   it "should be valid" do
-    puts @place.name 
     @place.should be_valid
   end
 

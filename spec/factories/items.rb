@@ -3,6 +3,6 @@
 FactoryGirl.define do
   factory :item do
     url "http://beacon.io"
-    document {  Document.new }
+    document {  FactoryGirl.build(:document) }
   end
 end

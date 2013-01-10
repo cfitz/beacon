@@ -24,7 +24,6 @@ describe UsersController do
       
       it "should allow an admin user to see the index page" do
         get :index
-        puts flash[:notice]
         response.should_not redirect_to('/')
         response.should be_success
       end

@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :corporate_body do
-    name "MyString"
+    name "A Corporation"
   end
 end

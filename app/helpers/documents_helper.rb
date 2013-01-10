@@ -1,19 +1,15 @@
 module DocumentsHelper
   
-  def input_to_text(input)
-    Nokogiri::XML(input.to_s).root.attributes["value"]
-  end
-  
   # this takes an item and makes the proper li for it. this is ugly as hell. 
   def render_list_item(item)
-    if item.url.include?("catalog.wmu")
+    if item.url.blank?
+      ""
+    elsif item.url.include?("catalog.wmu")
       "<li><a href='#{item.url}'><i class='icon-book'></i></a></li>"
     elsif item.url.include?("docs.google.com")
         "<li><a href='#{item.url}'><i class='icon-file'></i></a></li>"
-    elsif !item.url.include?("missing") # paperclip has a url of 'missing.pgn' if there isn't an attachment
+    elsif !item.url.blank?
       "<li><a href='#{item.url}'><i class='icon-file'></i><b>External Link</b></a></li>"
-    else
-      ""
     end    
   end
   
@@ -43,19 +39,11 @@ module DocumentsHelper
    end
    
    
-   # this determines if there's a pdf to be shown and it's public
-   def show_pdf?
-      if @document.pdf_item.nil? # there's no pdf, so show nothign
-        false
-      elsif @document.pdf_item
-       true
-      elsif @document.pdf_item and current_user # there's a pdf, it's private, but we're logged in, so show it. 
-       true
-      else # there's a pdf, it's private, and we're not logged in, so no show.  
-       false
-      end
+   # this determines if there's a pdf to be shown
+   def show_pdf? document
+     document.pdf_item.present? # if it's nil, return false
    end
-   
+     
   
  
 end

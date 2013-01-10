@@ -1,9 +1,8 @@
 class Document < Neo4j::Rails::Model
 
-  include Tire::Model::Search
-  include Tire::Model::Callbacks
   include BeaconSearch
   include Sluggable
+  include RelationshipNestedAttributes
   
   
   validate :ensure_named, :before => :create
@@ -36,8 +35,8 @@ class Document < Neo4j::Rails::Model
   has_n(:topics).to(Topic)
   
   #accepts_nested_attributes_for :creators, :allow_destroy_relationship => true, :reject_if => proc { |attributes| attributes['id'].blank? && attributes['name'].blank? }
-  accepts_nested_attributes_for :items
-  accepts_nested_attributes_for :topics, :allow_destory_relationship => true
+  accepts_nested_attributes_for :items, :allow_destroy => true
+  accepts_nested_attributes_for :topics, :allow_destroy_relationship => true
 
 
   def name=(name)
@@ -66,7 +65,6 @@ class Document < Neo4j::Rails::Model
       indexes :name, analyzer: 'snowball', boost: 100
       indexes :name_sort, :type => "string", :index => "not_analyzed"
       indexes :content, analyzer: 'snowball', boost: 50
-      
       indexes :format_facet, :type => "string", :index =>"not_analyzed"
       indexes :world_maritime_university_program_facet, :type => "string", :index => "not_analyzed"
       indexes :date, :type => "string", :index => "not_analyzed"
@@ -114,70 +112,7 @@ class Document < Neo4j::Rails::Model
     pdf = self.items.collect { |i| i if i.url.include?('docs.google.com') }
     pdf.first
   end
-  
-  # this is to fix nested attributes submitted by the form. 
-  def creators_rels_attributes=(args={})
-    puts args
-    args.each_pair do |k,v|
-      destroy = v["__destroy"] == "1" ? true : false 
-      if k.include?("new") # this is a newly added relationship
-        unless destroy
-          self.save #first we need to persist the document. 
-          creator = v["class"].constantize.find_or_create_by(:name => v["end_node_name"])
-          creator_role = Creator.new(:creators, self, creator, {:role => v["role"] })
-          creator_role.save
-        end
-      else # existing relationship, lets check it. 
-        if destroy 
-          creator = Creator.find(v["id"])
-          creator.destroy 
-        else
-          creator = Creator.find(v["id"])
-          unless creator.role == v["role"]
-            creator.role = v["role"]
-            creator.save
-          end
-        end
-      end
-    end
-  end
-  
-  
-  # this is a fix for rails that allows us to destroy relationships without destroying the item.
-   def update_nested_attributes(rel_type, attr, options)
-      allow_destroy, allow_destroy_relationship, reject_if = [options[:allow_destroy], options[:allow_destroy_relationship], options[:reject_if]] if options
-      begin
-        # Check if we want to destroy not found nodes (e.g. {..., :_destroy => '1' } ?
-        destroy = attr.delete(:_destroy)
-        destroy = '0' if destroy == 'false'
-        found = _find_node(rel_type, attr[:id]) || Neo4j::Rails::Model.find(attr[:id])
-        if allow_destroy && destroy && destroy != '0'
-          found.destroy if found
-        elsif allow_destroy_relationship && destroy && destroy != '0'
-          _remove_relationship(rel_type, found) if found
-        else
-          if not found
-            _create_entity(rel_type, attr) #Create new node from scratch
-          else
-            #Create relationship to existing node in case it doesn't exist already
-            _add_relationship(rel_type, found) if (not _has_relationship(rel_type, attr[:id]))
-            found.update_attributes(attr)
-          end
-        end
-      end unless reject_if?(reject_if, attr)
-    end
-    
-    def _remove_relationship(rel_type, node)
-      if respond_to?("#{rel_type}_rel")
-        send("#{rel_type}=", nil)
-      elsif respond_to?("#{rel_type}_rels")
-        has_n = send("#{rel_type}")
-        has_n.delete( node )
-      else
-        raise "oops #{rel_type}"
-      end
-    end
-
+ 
   #just returned title as a name. 
   def name
     self.title
@@ -204,6 +139,33 @@ class Document < Neo4j::Rails::Model
     countries.collect! { |c| c.has_nationality.to_a }.flatten!
     countries.collect! { |c| c.name }
     countries.uniq
+  end
+
+        
+  # this is to fix nested attributes submitted by the form. 
+  def creators_rels_attributes=(args={})
+    args.each_pair do |k,v|
+      destroy = v["__destroy"] == "1"
+      if k.include?("new") # this is a newly added relationship
+        unless destroy
+          self.save #first we need to persist the document. 
+          creator = v["class"].constantize.find_or_create_by(:name => v["end_node_name"])
+          creator_role = Creator.new(:creators, self, creator, {:role => v["role"] })
+          creator_role.save
+        end
+      else # existing relationship, lets check it. 
+        if destroy 
+          creator = Creator.find(v["id"])
+          creator.destroy 
+        else
+          creator = Creator.find(v["id"])
+          unless creator.role == v["role"]
+            creator.role = v["role"]
+            creator.save
+          end
+        end
+      end
+    end
   end
 
 

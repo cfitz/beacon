@@ -65,7 +65,7 @@ class TopicsController < ApplicationController
     # PUT /topics/1
     # PUT /topics/1.json
     def update
-      @Topic = Topic.find_sluggable(params[:id])
+      @topic = Topic.find_sluggable(params[:id])
 
       respond_to do |format|
         if @topic.update_attributes(params[:topic])

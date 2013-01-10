@@ -7,5 +7,5 @@
         %p Please leave your email below. We will contact you shortly! Thanks
         .controls
           = f.email_field :email, :input_html => { :class => "span6" },:placeholder => 'user@domain.com',  :hint => "add your article title here"
-
+          = f.password_field :password 
     %div= f.submit "Sign up"

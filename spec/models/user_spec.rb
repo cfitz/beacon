@@ -30,8 +30,33 @@ describe User do
     user.inactive_message.should == :not_approved
     user = FactoryGirl.create(:user)
     user.inactive_message.should == :inactive
-    
-    
   end
+  
+  it "should find the user based on what's returned from OAUTH" do
+     auth_hash =  OmniAuth::AuthHash.new 
+    auth_hash.info = {:email => 'user@crap.crap'}
+    User.should_receive(:find).with(:email => "user@crap.crap").once.and_return(FactoryGirl.create(:user))
+    user = User.find_for_google_oauth2(auth_hash)
+    user.email.should == "user@crap.crap"
+  end
+  
+  it "should make a new authorized user account if the email is wmu.se" do
+      auth_hash =  OmniAuth::AuthHash.new 
+     auth_hash.info = {:email => 'crap@wmu.se'}
+     User.should_receive(:find).with(:email => "crap@wmu.se").once.and_return(nil)
+     user = User.find_for_google_oauth2(auth_hash)
+     user.email.should == "crap@wmu.se"
+     user.approved.should be_true
+   end
+  
+  
+  it "should make a new unauthorized user account if the email is not wmu.se" do
+      auth_hash =  OmniAuth::AuthHash.new 
+     auth_hash.info = {:email => 'crap@wmu.com'}
+     User.should_receive(:find).with(:email => "crap@wmu.com").once.and_return(nil)
+     user = User.find_for_google_oauth2(auth_hash)
+     user.email.should == "crap@wmu.com"
+     user.approved.should be_false
+   end
   
 end
