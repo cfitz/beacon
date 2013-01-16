@@ -9,28 +9,29 @@
   
 .results-list
   - @documents.each do |document|
-    .result-item.row-fluid
-      .span12.title-container
-        = link_to document.title, document_path(document), :class => "title_link"
-      .span10.document-fields
-        %dl.dl-horizontal
-          %dt
-            Publication Date:
-          %dd= document.date
-            
-          - if document.creators.first
+    -unless document.nil?
+      .result-item.row-fluid
+        .span12.title-container
+          = link_to document.title, document_path(document), :class => "title_link"
+        .span10.document-fields
+          %dl.dl-horizontal
             %dt
-              Authors:
-              = authors_list(document.creators)
-          - if document.topics.first
-            %dt 
-              Topics:
-              = topics_list(document.topics) 
-          %em
-      .span12.items-container= item_list(document.items, "ul")
+              Publication Date:
+            %dd= document.date
+            
+            - if document.creators.first
+              %dt
+                Authors:
+                = authors_list(document.creators)
+            - if document.topics.first
+              %dt 
+                Topics:
+                = topics_list(document.topics) 
+            %em
+        .span12.items-container= item_list(document.items, "ul")
     
-      - if current_user && current_user.admin?
-        %td
-          = link_to t('.edit', :default => t("helpers.links.edit")), edit_document_path(document), :class => 'btn btn-mini'
-          = link_to t('.destroy', :default => t("helpers.links.destroy")), document_path(document), :method => :delete, :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')), :class => 'btn btn-mini btn-danger'
+        - if current_user && current_user.admin?
+          %td
+            = link_to t('.edit', :default => t("helpers.links.edit")), edit_document_path(document), :class => 'btn btn-mini'
+            = link_to t('.destroy', :default => t("helpers.links.destroy")), document_path(document), :method => :delete, :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')), :class => 'btn btn-mini btn-danger'
 = page_navigation_links @documents

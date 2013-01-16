@@ -37,6 +37,7 @@ class Topic < Neo4j::Rails::Model
   def to_indexed_json
          json = {
             :name   => name,  
+           :name_sort => name.gsub(/\s+/, "").downcase,               
             :world_maritime_university_program_facet => world_maritime_university_programs,
             :related_documents => self.documents.to_a.size
           }

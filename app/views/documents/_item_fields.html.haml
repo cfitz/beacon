@@ -1,16 +1,6 @@
 = f.input :parent_uuid, :as => :hidden, :input_html => { :value => @document.uuid }
 .control-group
-  = f.label "Public: ", :class => 'checkbox'
+  = f.label :url, :class => 'uri_field'
   .controls
-    = f.check_box :open_access, :class => 'checkbox'
-.control-group
-  = f.label :uri, :class => 'uri_field'
-  .controls
-    = f.url_field :uri, :class => 'uri_field'
+    = f.url_field :url, :class => 'uri_field'
     = f.link_to_remove "x"
-.control-group
-  = f.label :attachment
-  - if !f.object.attachment_file_name.blank?
-    .controls= link_to("See Documents", f.object.attachment.url)
-  - else
-    .controls= f.file_field :attachment

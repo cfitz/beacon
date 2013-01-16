@@ -3,7 +3,6 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 
-$ -> $('#document_summary').wysihtml5();
 $ -> bindCreatorTypeahead($('.creator-typeahead'))
 $ -> bindTopicTypeahead($('.topic-typeahead'))
 
@@ -27,7 +26,8 @@ $ -> window.nestedFormEvents.insertFields = (content, assoc, link) ->
      bindTopicTypeahead(jContent.find('.topic-typeahead'))     
      jContent.insertBefore(link)
 
-$ -> DV.load("#{window.location}.json", { container: '#DV-container', width: '100%', height: 500,  sidebar: false });
+# Document Viewer - removing.
+#$ -> DV.load("#{window.location}.json", { container: '#DV-container', width: '100%', height: 500,  sidebar: false });
 
 # once selected, we want to make the input box readonly, disable it for updating, and change the hidden id field so that 
 # the relationship gets made. 

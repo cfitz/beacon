@@ -4,7 +4,11 @@ module ApplicationHelper
 
   ::BootstrapLinkRenderer
   
-  
+  # returns a friendly name for the omni_auth provider
+  def provider_name(provider)
+    names = { "google_oauth2" => "World Maritime University Log-In", "facebook" => "Facebook"}
+    names[provider] ? names[provider] : provider.titleize
+  end
   
   # This build the list for the facets. 
   def facet_list(facet_label, facet_values)

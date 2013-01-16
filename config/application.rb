@@ -56,6 +56,7 @@ module Beacon
 
     # Configure where the neo4j database should exist
     config.neo4j.storage_path = "#{config.root}/db/neo4j-#{Rails.env}"
+    config.neo4j.identity_map = false
 
 
     # Use SQL instead of Active Record's schema dumper when creating the database.

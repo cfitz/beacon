@@ -17,5 +17,6 @@ FactoryGirl.define do
     email "admin@crap.crap"
     admin      true
     approved true
+    person FactoryGirl.create(:person)
   end
 end

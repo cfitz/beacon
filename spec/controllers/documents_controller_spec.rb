@@ -26,18 +26,21 @@ describe DocumentsController do
   def valid_attributes
     {}
   end
+  
+  before(:each) do
+    Document.all.each { |d| puts "boosh #{d.id}"; d.delete } 
+  end
 
 
   describe "GET index" do
     it "assigns all documents as @documents" do
   #    pending "need to fix this to work with Tire"
-      document = Document.create! valid_attributes
       get :index
       assigns(:documents).should be_an_instance_of(Tire::Results::Collection)
     end
     
     it "returns facets if passed into the params" do
-      Document.tire.index.delete
+      puts Document.index_name
       document = Document.create!( :date => "2012" )
       get :index
       assigns(:facets).should eq({"format_facet"=>{"_type"=>"terms", "missing"=>0, "total"=>0, "other"=>0, "terms"=>[]}, "world_maritime_university_program_facet"=>{"_type"=>"terms", "missing"=>0, "total"=>0, "other"=>0, "terms"=>[]}, "date"=>{"_type"=>"terms", "missing"=>0, "total"=>0, "other"=>0, "terms"=>[]}, "creator_nationality_facet"=>{"_type"=>"terms", "missing"=>0, "total"=>0, "other"=>0, "terms"=>[]}}) 
@@ -72,7 +75,7 @@ describe DocumentsController do
   describe "GET new" do
     login_admin
     it "assigns a new document as @document" do
-      document = Document.create! valid_attributes
+      puts "^^^^^^^"
       get :new
       assigns(:document).should be_a_new(Document)
     end

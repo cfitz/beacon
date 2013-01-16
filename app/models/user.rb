@@ -3,9 +3,10 @@ class User < Neo4j::Rails::Model
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   attr_accessible :given_name, :surname, :email, :password, :password_confirmation, :remember_me, :approved, :admin
   
+  before_validation :ensure_password
+  before_save :ensure_person
   
   # Setup accessible (or protected) attributes for your model
-  has_n(:affiliation).from(:CorporateBody)
   property :email, :index => :exact
   property :approved, :type => :boolean
   property :admin, :type => :boolean
@@ -23,8 +24,7 @@ class User < Neo4j::Rails::Model
   property :current_sign_in_ip, :type =>  String
   property :last_sign_in_ip, :type => String
   
-  
-  
+  has_one(:person).from(Person, :user_profile)
   
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :omniauthable,
@@ -56,7 +56,9 @@ class User < Neo4j::Rails::Model
      end 
    end
  
-   
+   def name
+     "#{self.given_name} #{self.surname}"
+   end
    
    def self.find_for_google_oauth2(access_token, signed_in_resource=nil)
       data = access_token.info
@@ -64,13 +66,23 @@ class User < Neo4j::Rails::Model
       if user
         return user
       elsif data["email"].downcase.include?("wmu.se")
-        return User.create!(:email => data["email"].downcase, :password => Devise.friendly_token[0,20], :approved => true)
+        return User.create!(:email => data["email"].downcase, :surname => data["last_name"], :given_name => data["first_name"], :password => Devise.friendly_token[0,20], :approved => true)
       else
-        return User.create!(:email => data["email"].downcase, :password => Devise.friendly_token[0,20])
+        return User.create!(:email => data["email"].downcase, :surname => data["last_name"], :given_name => data["first_name"], :password => Devise.friendly_token[0,20])
       end
    end
 
-
+  protected
+  
+  # makes sure we have a password in the password prop even if they auth with google
+  def ensure_password
+    self.password ||= Devise.friendly_token[0,20]
+  end
+  
+  # this makes sure the person has a person page
+  def ensure_person
+      self.person = Person.create(:name => self.name) unless self.person
+  end
 
 
 end

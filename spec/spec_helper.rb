@@ -42,17 +42,19 @@ Spork.prefork do
     # config.mock_with :mocha
     # config.mock_with :flexmock
     # config.mock_with :rr
-    
-    config.after(:each) do
-      Neo4j.started_db.graph.getAllNodes.each do |n| 
-        Neo4j::Transaction.run do
-          unless n.id == 0
-            n.rels.each { |r| r.delete unless r.nil? }
-            n.delete unless n.nil?
-          end
-        end
-      end
+    config.before(:suite) do
+        DatabaseCleaner.strategy = :truncation
+        DatabaseCleaner.clean_with(:truncation)
     end
+    
+    config.before(:each) do
+      DatabaseCleaner.start
+    end
+
+    config.after(:each) do
+      DatabaseCleaner.clean
+    end
+    
     # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
     #config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -65,8 +67,8 @@ Spork.prefork do
     # automatically. This will be the default behavior in future versions of
     # rspec-rails.
     config.infer_base_class_for_anonymous_controllers = false
-    config.include Devise::TestHelpers, :type => :controller
     config.extend ControllerMacros, :type => :controller
+    config.extend IndexClenaer
   end
 
 end

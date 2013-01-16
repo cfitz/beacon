@@ -31,6 +31,7 @@ class Person < Neo4j::Rails::Model
   has_n(:documents_created).from(Document.creators).relationship(Creator)
   has_n(:has_membership).to(CorporateBody).relationship(GroupMember)
   has_n(:has_nationality).to(Place)
+  has_one(:user_profile).to(User)
   
   validates :name, :presence => true
   validate :ensure_named, :before => :create
@@ -55,7 +56,7 @@ class Person < Neo4j::Rails::Model
   def to_indexed_json
          json = {
             :name   => name,
-            :name_sort => name,   
+            :name_sort => name.gsub(/\s+/, "").downcase,   
             :world_maritime_university_program_facet => self.has_membership.collect { |p| p.name }, 
             :nationality_facet => self.has_nationality.collect { |n| n.name },
             :role_facet => self.roles.collect { |r| r.titleize }        

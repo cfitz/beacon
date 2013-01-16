@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
    include AuthenticationHelper
 
-  before_filter :enforce_permissions
+  before_filter :enforce_permissions, :only => [:index, :destroy,  ]
+  before_filter :enforce_is_admin_or_is_current_user, :only => [:edit, :show, :update]
   
   def show
      @user = User.find(params[:id])

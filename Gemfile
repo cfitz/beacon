@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 gem 'jruby-openssl', '0.7.7'
 
-gem 'rails', '3.2.3'
+gem 'rails'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -17,11 +17,10 @@ gem 'omniauth-google-oauth2'
 gem 'marc'
 gem "haml-rails"
 gem 'tire'
+gem 'neo4j-will_paginate'
 gem 'will_paginate'
 gem 'simple_form'
 gem "nested_form"
-gem 'bootstrap-wysihtml5-rails'
-gem 'bootstrap-datepicker-rails'
 gem 'rtika'
 gem 'google_drive'
 
@@ -41,8 +40,8 @@ group :test do
   gem 'simplecov', :require => false
 	gem 'capybara','1.1.2'
 	gem 'factory_girl_rails', '~> 3.5.0', require: false
-	gem 'steak'
-	gem 'database_cleaner', '0.7.0'
+#  gem 'cucumber-rails', :require => false
+ #	gem 'database_cleaner', :path => "/Users/chrisfitzpatrick/code/database_cleaner"     #, '0.7.0'
 	gem 'guard-spork', '0.3.2'
 	gem 'spork', '0.9.0'
 	gem 'launchy', '2.1.0'

@@ -38,7 +38,7 @@ class Place < Neo4j::Rails::Model
   def to_indexed_json
          json = {
             :name   => name,  
-            :name_sort => name,
+            :name_sort => name.gsub(/\s+/, "").downcase,   
             :continent_facet => self.belongs_to_continents,
             :place_type_facet => self.place_type
           }
