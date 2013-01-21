@@ -146,7 +146,7 @@ class Document < Neo4j::Rails::Model
   def creators_rels_attributes=(args={})
     args.each_pair do |k,v|
       destroy = v["__destroy"] == "1"
-      if k.include?("new") # this is a newly added relationship
+      if k.include?("new") or v["id"].empty? # this is a newly added relationship
         unless destroy
           self.save #first we need to persist the document. 
           creator = v["class"].constantize.find_or_create_by(:name => v["end_node_name"])

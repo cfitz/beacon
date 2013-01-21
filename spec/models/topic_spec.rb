@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Topic do
 
   before(:each) do
-    @topic = FactoryGirl.build(:topic)
+    @topic = FactoryGirl.build(:topic_with_documents)
   end
 
   it "should be ivalid" do
@@ -20,7 +20,7 @@ describe Topic do
   end
 
   it "should return proper json for elastic search" do
-     @topic.to_indexed_json.should == { "name" => "MyTopic","world_maritime_university_program_facet" => [],"related_documents" => 0}.to_json
+     @topic.to_indexed_json.should == { "name" => "MyTopic", "name_sort" => "mytopic", "world_maritime_university_program_facet" => [],"related_documents" => 2}.to_json
   end
 
   it "should return the proper programs related to the topic" do

@@ -20,7 +20,7 @@ describe Person do
     @person.should_receive(:has_nationality).and_return([FactoryGirl.build(:place)])
     @person.should_receive(:roles).and_return(["writer"])
     
-    @person.to_indexed_json.should == { "name"=>"John Smith","name_sort"=>"John Smith","world_maritime_university_program_facet"=>["A Corporation"],
+    @person.to_indexed_json.should == { "name"=>"John Smith","name_sort"=>"johnsmith","world_maritime_university_program_facet"=>["A Corporation"],
       "nationality_facet"=>["A Place"],"role_facet"=>["Writer"] }.to_json
   end
   

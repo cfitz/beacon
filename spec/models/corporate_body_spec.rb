@@ -3,7 +3,7 @@ require 'spec_helper'
 describe CorporateBody do
  
  before(:each) do
-   @cb =  user = FactoryGirl.build(:corporate_body)
+   @cb = FactoryGirl.build(:corporate_body)
  end
 
  it "should be valid " do

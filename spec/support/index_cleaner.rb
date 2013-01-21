@@ -1,7 +1,6 @@
-module IndexClenaer
+module IndexCleaner
 
-  def clean_indexes
-    before(:each) do
+  def self.clean
       # iterate over the model types
       # there are also ways to fetch all model classes of the rails app automaticly, e.g.:
       #   http://stackoverflow.com/questions/516579/is-there-a-way-to-get-a-collection-of-all-the-models-in-your-rails-app
@@ -10,11 +9,10 @@ module IndexClenaer
         if klass.respond_to? :tire
           # delete the index for the current model
           klass.tire.index.delete
-
+          klass.tire.create_elasticsearch_index
           # the mapping definition must get executed again. for that, we reload the model class.
-          load File.expand_path("../../../app/models/#{klass.name.underscore}.rb", __FILE__)
+          #load File.expand_path("../../../app/models/#{klass.name.underscore}.rb", __FILE__)
 
-        end
       end
     end
   end

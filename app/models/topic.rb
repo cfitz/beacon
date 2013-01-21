@@ -1,7 +1,6 @@
 # a topic is anythign that is not a person or place. A physical object or abstract idea. 
 class Topic < Neo4j::Rails::Model
-  include Tire::Model::Search
-  include Tire::Model::Callbacks
+ 
   include BeaconSearch
   include Sluggable
   

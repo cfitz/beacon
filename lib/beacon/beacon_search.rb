@@ -11,7 +11,7 @@ module BeaconSearch
       # this is used when searching for a 
       def elastic_search(params={})
           params = format_params(params)
-          search = self.tire.search(:page => params[:page], :per_page => params[:per_page], :load=> params[:load_models] ) do
+          search = self.tire.search(:page => params[:page], :per_page => params[:per_page], :load=> true ) do
                query do
                  boolean do must { string params[:request_query], :default_operator => "AND" } if params[:request_query] end
                  params[:facet_filters].each { |ff| boolean  &ff }
@@ -50,7 +50,6 @@ module BeaconSearch
       
       # a real nasty method to format request paramters to pass on to the elastic_search
       def format_params(params)
-         params[:load_models] ||= true
         
          # this is just used for multi_index search
          params[:indexes] ||= ['documents', 'people', 'topics', 'places' ]
@@ -62,7 +61,7 @@ module BeaconSearch
          # will_paginate settings
         params[:page] ||= 1
         params[:per_page] ||=  25
-        params[:offset] =  ( ( params[:page] - 1) * 10)
+        params[:offset] =  ( ( params[:page].to_i - 1) * params[:per_page].to_i)
 
          # sort by
          params[:sort_by], params[:order_by] = params[:sort].split(":") if params[:sort]

@@ -5,8 +5,15 @@ module Tire
     class Collection
     
     
+    
+    
           def __find_records_by_ids(klass, ids)
-                @options[:load] === true ? Neo4j.query {  n = node(ids); n }.collect { |n| n[:v1] }.compact : klass.find(ids, @options[:load])
+            if @options[:load] === true  
+              records = Neo4j.query {  n = node(ids); n }.collect { |n| n[:v1] }.compact 
+            else  
+              records = klass.find(ids)
+            end
+            records
           end
 
     end

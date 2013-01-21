@@ -4,8 +4,8 @@ describe User do
 
   it "should return the email for #to_s" do
    user  = FactoryGirl.create(:user)
-   user.email.should == "user@crap.crap"
-   user.to_s.should == "user@crap.crap"
+   user.email.should == "user@wmu.se"
+   user.to_s.should == "user@wmu.se"
   end
   
   it "should return false if approved is nil or false" do
@@ -34,10 +34,10 @@ describe User do
   
   it "should find the user based on what's returned from OAUTH" do
      auth_hash =  OmniAuth::AuthHash.new 
-    auth_hash.info = {:email => 'user@crap.crap'}
-    User.should_receive(:find).with(:email => "user@crap.crap").once.and_return(FactoryGirl.create(:user))
+    auth_hash.info = {:email => 'user@wmu.se'}
+    User.should_receive(:find).with(:email => "user@wmu.se").once.and_return(FactoryGirl.create(:user))
     user = User.find_for_google_oauth2(auth_hash)
-    user.email.should == "user@crap.crap"
+    user.email.should == "user@wmu.se"
   end
   
   it "should make a new authorized user account if the email is wmu.se" do

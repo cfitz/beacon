@@ -9,7 +9,7 @@ class DocumentIndexer
 
 
   GDRIVE_USER = "library@wmu.se"
-  GDRIVE_PASSWORD = "libR0x!!"
+  GDRIVE_PASSWORD = "Mp4L!ie2r"
   
   attr_accessor :session, :collection
   

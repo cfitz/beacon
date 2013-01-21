@@ -1,9 +1,19 @@
 require 'spec_helper'
 
 describe "Topics" do
+
+    
+    before(:all) do
+      Topic.tire.index.delete
+      Topic.tire.create_elasticsearch_index
+      Topic.all.each { |t| t.delete }
+    end
+
+
   describe "GET /topics" do
+    
+    
     it "works! (now write some real specs)" do
-      FactoryGirl.create(:topic)
       # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
       get topics_path
       response.status.should be(200)

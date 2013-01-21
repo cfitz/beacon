@@ -20,28 +20,28 @@ require 'spec_helper'
 
 describe DocumentsController do
   logout_user
+  
+  before(:each) do
+    IndexCleaner.clean
+  end
+  
   # This should return the minimal set of attributes required to create a valid
   # Document. As you add validations to Document, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {}
+    FactoryGirl.attributes_for(:document)
   end
   
-  before(:each) do
-    Document.all.each { |d| puts "boosh #{d.id}"; d.delete } 
-  end
-
-
   describe "GET index" do
     it "assigns all documents as @documents" do
-  #    pending "need to fix this to work with Tire"
+      document = FactoryGirl.create(:document)
+      Document.tire.index.refresh
       get :index
-      assigns(:documents).should be_an_instance_of(Tire::Results::Collection)
+      assigns(:documents).to_a.should eq([document])
     end
     
     it "returns facets if passed into the params" do
-      puts Document.index_name
-      document = Document.create!( :date => "2012" )
+      document = FactoryGirl.create(:document)
       get :index
       assigns(:facets).should eq({"format_facet"=>{"_type"=>"terms", "missing"=>0, "total"=>0, "other"=>0, "terms"=>[]}, "world_maritime_university_program_facet"=>{"_type"=>"terms", "missing"=>0, "total"=>0, "other"=>0, "terms"=>[]}, "date"=>{"_type"=>"terms", "missing"=>0, "total"=>0, "other"=>0, "terms"=>[]}, "creator_nationality_facet"=>{"_type"=>"terms", "missing"=>0, "total"=>0, "other"=>0, "terms"=>[]}}) 
       
@@ -53,19 +53,19 @@ describe DocumentsController do
 
   describe "GET show" do
     it "assigns the requested document as @document" do
-      document = Document.create! valid_attributes
+      document = FactoryGirl.create(:document)
       get :show, {:id => document.to_param}
       assigns(:document).should eq(document)
     end
     
     it "assigns the requested document as @document using the prettyurl slug" do
-      document = Document.create!({ :title => "my document"} )
+      document = FactoryGirl.create( :document,  :title =>  "my document" )
       get :show, {:id => document.slug }
       assigns(:document).should eq(document)
     end
   
       it "not assign the requested document as @document if the prettyurl slug doesn't exists" do
-        document = Document.create!({ :title => "my document"} )
+        document = FactoryGirl.create( :document,  :title => "my document" )
         get :show, { :id => "foo_foo" }
         assigns(:document).should_not eq(document)
       end
@@ -75,7 +75,6 @@ describe DocumentsController do
   describe "GET new" do
     login_admin
     it "assigns a new document as @document" do
-      puts "^^^^^^^"
       get :new
       assigns(:document).should be_a_new(Document)
     end
@@ -93,7 +92,7 @@ describe DocumentsController do
   describe "GET edit" do
     login_admin
     it "assigns the requested document as @document" do
-      document = Document.create! valid_attributes
+      document = FactoryGirl.create(:document)
       get :edit, {:id => document.to_param}
       assigns(:document).should eq(document)
     end
@@ -141,7 +140,7 @@ describe DocumentsController do
     describe "with valid params" do
       login_admin
       it "updates the requested document" do
-        document = Document.create! valid_attributes
+        document = FactoryGirl.create(:document)
         # Assuming there are no other documents in the database, this
         # specifies that the Document created on the previous line
         # receives the :update_attributes message with whatever params are
@@ -151,13 +150,13 @@ describe DocumentsController do
       end
 
       it "assigns the requested document as @document" do
-        document = Document.create! valid_attributes
+        document = FactoryGirl.create(:document)
         put :update, {:id => document.to_param, :document => valid_attributes}
         assigns(:document).should eq(document)
       end
 
       it "redirects to the document" do
-        document = Document.create! valid_attributes
+        document = FactoryGirl.create(:document)
         put :update, {:id => document.to_param, :document => valid_attributes}
         response.should redirect_to(document)
       end
@@ -166,7 +165,7 @@ describe DocumentsController do
     describe "with invalid params" do
       login_admin
       it "assigns the document as @document" do
-        document = Document.create! valid_attributes
+        document = FactoryGirl.create(:document)
         # Trigger the behavior that occurs when invalid params are submitted
         Document.any_instance.stub(:save).and_return(false)
         put :update, {:id => document.to_param, :document => {}}
@@ -174,7 +173,7 @@ describe DocumentsController do
       end
 
       it "re-renders the 'edit' template" do
-        document = Document.create! valid_attributes
+        document = FactoryGirl.create(:document)
         # Trigger the behavior that occurs when invalid params are submitted
         Document.any_instance.stub(:save).and_return(false)
         put :update, {:id => document.to_param, :document => {}}
@@ -186,14 +185,14 @@ describe DocumentsController do
   describe "DELETE destroy" do
     login_admin
     it "destroys the requested document" do
-      document = Document.create! valid_attributes
+      document = FactoryGirl.create(:document)
       expect {
         delete :destroy, {:id => document.to_param}
       }.to change(Document, :count).by(-1)
     end
 
     it "redirects to the documents list" do
-      document = Document.create! valid_attributes
+      document = FactoryGirl.create(:document)
       delete :destroy, {:id => document.to_param}
       response.should redirect_to(documents_url)
     end

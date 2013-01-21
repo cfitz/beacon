@@ -8,11 +8,10 @@ class PeopleController < ApplicationController
    
    @people = Person.elastic_search params 
    @facets = @people.facets
-      
     respond_to do |format|
       format.html # index.html.erb
       format.json
-    end
+   end
   end
 
   # GET /people/1

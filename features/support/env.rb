@@ -3,13 +3,20 @@
 # newer version of cucumber-rails. Consider adding your own code to a new file 
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
-
+require 'simplecov'
 require 'rubygems'
 require 'spork'
  
 Spork.prefork do
+  unless ENV['DRB']
+    require 'simplecov'
+    SimpleCov.command_name "features"
+    SimpleCov.start 'rails'
+  end
   require 'cucumber/rails'
-
+  require Rails.root.join('spec', 'support', 'omniauth')
+  OmniAuth.config.test_mode = true
+  SimpleCov.command_name "features"
 
   # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
   # order to ease the transition to Capybara we set the default here. If you'd
@@ -20,6 +27,12 @@ Spork.prefork do
 end
  
 Spork.each_run do
+  if ENV['DRB']
+    require 'simplecov'
+    SimpleCov.command_name "features"
+    SimpleCov.start 'rails'
+  end
+  
   # By default, any exception happening in your Rails application will bubble up
   # to Cucumber so that your scenario will fail. This is a different from how 
   # your application behaves in the production environment, where an error page will 
@@ -41,7 +54,7 @@ Spork.each_run do
   # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
   begin
 #    DatabaseCleaner.strategy = :truncation
-DatabaseCleaner[:neo4j].strategy = :truncation   
+     DatabaseCleaner[:neo4j].strategy = :truncation   
   rescue NameError
     raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
   end

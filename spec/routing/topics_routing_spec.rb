@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe TopicsController do
   describe "routing" do
-
+  
     it "routes to #index" do
       get("/topics").should route_to("topics#index")
     end

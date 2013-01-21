@@ -16,7 +16,7 @@
     %legend Creators
     - @document.creators_rels.each_with_index do |rel, index|
       = render :partial => "creators_rels", :locals => { :rel => rel, :index => index}
-    %a{:href => "javascript:void(0)", :class=> "add_nested_fields", :data => {:association => "creators_rels"}} Add a creator
+    %a{:href => "javascript:void(0)", :class=> "add_nested_fields", :data => {:association => "creators_rels", "blueprint-id" => "creators_rels_fields_blueprint"}} Add a creator
   %section#topics
     %legend Topics
     = f.fields_for :topics, Topic if !@document.topics.first.nil?

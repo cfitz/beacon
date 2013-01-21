@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 gem 'jruby-openssl', '0.7.7'
 
-gem 'rails'
+gem 'rails', '3.2.11'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -9,10 +9,9 @@ gem 'rails'
 gem 'neo4j'
 #gem 'neo4j-core', :git => 'git://github.com/andreasronge/neo4j-core.git'
 gem "torquebox-rake-support"
-#gem 'devise', "2.0.4"
+gem "devise", ">= 2.2.0"
 gem 'devise-neo4j', :git => "git@github.com:cfitz/devise-neo4j.git", :branch => 'devise2'
 #gem 'devise-neo4j', :path => "/Users/chrisfitzpatrick/code/devise-neo4j"
-gem 'devise'
 gem 'omniauth-google-oauth2'
 gem 'marc'
 gem "haml-rails"
@@ -40,11 +39,12 @@ group :test do
   gem 'simplecov', :require => false
 	gem 'capybara','1.1.2'
 	gem 'factory_girl_rails', '~> 3.5.0', require: false
-#  gem 'cucumber-rails', :require => false
- #	gem 'database_cleaner', :path => "/Users/chrisfitzpatrick/code/database_cleaner"     #, '0.7.0'
+  gem 'cucumber-rails', :require => false
+  gem 'database_cleaner', :git => "https://github.com/cfitz/database_cleaner.git"     #, '0.7.0'
 	gem 'guard-spork', '0.3.2'
 	gem 'spork', '0.9.0'
 	gem 'launchy', '2.1.0'
+	gem "email_spec", ">= 1.4.0"
 	gem 'rb-fsevent', '0.9.1', :require => false
  	gem 'growl', '1.0.3'
 end

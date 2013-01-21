@@ -110,11 +110,9 @@ class DocumentImporter
             terms << cleanup( six50["x"]) 
          end     
         
-        term = terms.join(" ")
-        topic = term.titleize
+        terms.collect! { |t| t.titleize }
+        topics << terms.join(" - ")
         
-        topics << topic
-
         if six50["z"] 
           places << cleanup(six50["z"].titleize)
         end
@@ -138,6 +136,7 @@ class DocumentImporter
       topics.each do |topic| 
         existing_topics = work.topics.to_a.collect { |t| t.name }
         unless existing_topics.include?(topic)
+          puts topic
           work.topics << Topic.find_or_create_by!(:name => topic ); 
           work.save
         end

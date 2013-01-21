@@ -9,12 +9,12 @@ class Person < Neo4j::Rails::Model
   
   index :id
 
-  property :name, :type => String, :index => :exact
   property :slug, :index => :exact
   property :title, :type => String, :index => :exact
   
   property :alt_id, :type => String, :index => :exact
 
+  property :name, :type => String, :index => :exact
   property :surname, :type => String, :index => :exact
   property :first_name, :type => String, :index => :exact
 

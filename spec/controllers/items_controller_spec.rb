@@ -25,29 +25,23 @@ describe ItemsController do
   # Item. As you add validations to Item, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    { :url => "http://google.com" }
+    FactoryGirl.attributes_for(:item)
   end
 
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # ItemsController. Be sure to keep this updated too.
-  def valid_session
-    {}
-  end
+ 
 
   describe "GET index" do
     it "assigns all items as @items" do
-      item = Item.create!( :url => "http://google.com" )
-      Item.stub(:all).and_return([item])
-      get :index, {}, valid_session
-      assigns(:items).should eq([item])
+      item = FactoryGirl.create(:item)
+      get :index
+      assigns(:items).to_a.should eq([item])
     end
   end
 
   describe "GET show" do
     it "assigns the requested item as @item" do
-      item = Item.create! valid_attributes
-      get :show, {:id => item.to_param}, valid_session
+      item = FactoryGirl.create(:item)
+      get :show, {:id => item.to_param}
       assigns(:item).should eq(item)
     end
   end
@@ -55,7 +49,7 @@ describe ItemsController do
   describe "GET new" do
     login_admin
     it "assigns a new item as @item" do
-      item = Item.create! valid_attributes
+      item = FactoryGirl.create(:item)
       get :new
       assigns(:item).should be_a_new(Item)
     end
@@ -64,7 +58,7 @@ describe ItemsController do
   describe "GET edit" do
     login_admin
     it "assigns the requested item as @item" do
-      item = Item.create! valid_attributes
+      item = FactoryGirl.create(:item)
       get :edit, {:id => item.to_param}
       assigns(:item).should eq(item)
     end
@@ -86,8 +80,7 @@ describe ItemsController do
       end
 
       it "redirects to the created item" do
-        item = Item.create! valid_attributes
-        post :create, { :id => item.id, :item => valid_attributes}
+        post :create, { :item => valid_attributes}
         response.should redirect_to(Item.all.to_a.last)
       end
     end
@@ -113,7 +106,7 @@ describe ItemsController do
     login_user
     describe "with valid params" do
       it "updates the requested item" do
-        item = Item.create! valid_attributes
+        item = FactoryGirl.create(:item)
         
         # Assuming there are no other items in the database, this
         # specifies that the Item created on the previous line
@@ -124,13 +117,13 @@ describe ItemsController do
       end
 
       it "assigns the requested item as @item" do
-        item = Item.create! valid_attributes        
+        item = FactoryGirl.create(:item)
         put :update, {:id => item.to_param, :item => valid_attributes}
         assigns(:item).should eq(item)
       end
 
       it "redirects to the item" do
-        item = Item.create! valid_attributes
+        item = FactoryGirl.create(:item)
         
         put :update, {:id => item.to_param, :item => valid_attributes}
         response.should redirect_to(item)
@@ -139,7 +132,7 @@ describe ItemsController do
 
     describe "with invalid params" do
       it "assigns the item as @item" do
-        item = Item.create! valid_attributes
+        item = FactoryGirl.create(:item)
         
         # Trigger the behavior that occurs when invalid params are submitted
         Item.any_instance.stub(:save).and_return(false)
@@ -148,8 +141,7 @@ describe ItemsController do
       end
 
       it "re-renders the 'edit' template" do
-        item = Item.create! valid_attributes
-      
+        item = FactoryGirl.create(:item) 
         # Trigger the behavior that occurs when invalid params are submitted
         Item.any_instance.stub(:save).and_return(false)
         put :update, {:id => item.to_param, :item => {}}
@@ -161,7 +153,7 @@ describe ItemsController do
   describe "DELETE destroy" do
     login_admin
     it "destroys the requested item" do
-      item = Item.create! valid_attributes
+      item = FactoryGirl.create(:item)
       
       expect {
         delete :destroy, {:id => item.to_param}
@@ -169,7 +161,7 @@ describe ItemsController do
     end
 
     it "redirects to the items list" do
-      item = Item.create! valid_attributes
+      item = FactoryGirl.create(:item)
       delete :destroy, {:id => item.to_param}
       response.should redirect_to(items_url)
     end

@@ -1,21 +1,28 @@
 require 'rubygems'
+require 'simplecov'
 require 'spork'
+require 'database_cleaner'
 #uncomment the following line to use spork with the debugger
 #require 'spork/ext/ruby-debug'
 
 
 
 Spork.prefork do
+  # Coverage currently not working in jruby.
+  unless ENV['DRB']
+      require 'simplecov'
+      SimpleCov.command_name "features"
+      SimpleCov.start 'rails'
+  end
+  
+  
   # Loading more in this block will cause your tests to run faster. However,
   # if you change any configuration or code from libraries loaded here, you'll
   # need to restart spork for it take effect.
   # This file is copied to spec/ when you run 'rails generate rspec:install'
    # This code will be run each time you run your specs.
   # coverage currently not working in jruby. waiting for 1.7
-   unless ENV['DRB']
-      require 'simplecov'
-      SimpleCov.start 'rails'
-    end
+  
   
   
   ENV["RAILS_ENV"] ||= 'test'
@@ -28,11 +35,7 @@ Spork.prefork do
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 
-# Coverage currently not working in jruby.
-#  unless ENV['DRB']
-#    require 'simplecov'
-#    SimpleCov.start 'rails'
-#  end
+
   
   RSpec.configure do |config|
     # ## Mock Framework
@@ -53,6 +56,7 @@ Spork.prefork do
 
     config.after(:each) do
       DatabaseCleaner.clean
+#      IndexCleaner.clean
     end
     
     # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -68,21 +72,22 @@ Spork.prefork do
     # rspec-rails.
     config.infer_base_class_for_anonymous_controllers = false
     config.extend ControllerMacros, :type => :controller
-    config.extend IndexClenaer
   end
 
 end
 
 Spork.each_run do
+  if ENV['DRB']
+    require 'simplecov'
+    SimpleCov.start 'rails'
+  end
+  
   require 'factory_girl_rails'
   RSpec.configure do |config|
     config.include FactoryGirl::Syntax::Methods
   end  
   # This code will be run each time you run your specs.
 # coverage currently not working in jruby. waiting for 1.7
- unless ENV['DRB']
-    require 'simplecov'
-    SimpleCov.start 'rails'
-  end
+
   
 end

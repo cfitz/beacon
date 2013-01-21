@@ -1,16 +1,8 @@
 -# This is a file that had to be added to get the nested form add working. Kinda lame, but it works. 
 -# this should eventually be dried out and worked into the _creators_rels partial. 
-%div#creators_rels_fields_blueprint{:style => "display: none"}
-  .fields
-    .control-group
-      %label{:class => "string optional control-label control-label", :for => "document_creators_rels_attributes_new_creators_rels_name"} Name
-      .controls
-        = hidden_field_tag( "document_creators_rels_attributes_new_creators_rels_end_node", nil, { :name => "document[creators_rels_attributes][new_creators_rels][id]"} )
-        = text_field_tag( "document_creators_rels_attributes_new_creators_rels_end_node_name" , nil, { :class => 'typeahead creator-typeahead',   :name => "document[creators_rels_attributes][new_creators_rels][end_node_name]"} )
-        = select_tag("document_creators_rels_attributes_new_creators_rels_class", options_for_select([["Person", "Person"], ["Corporate Body", "CorporateBody"]]), { :name => "document[creators_rels_attributes][new_creators_rels][class]"} )
-        = select_tag("document_creators_rels_attributes_new_creators_rels_role", options_for_select(Creator.default_roles), { :name => "document[creators_rels_attributes][new_creators_rels][role]"} )
-        = hidden_field_tag( "document_creators_rels_attributes_new_creators_rels__destroy", "false", { :name => "document[creators_rels_attributes][new_creators_rels][__destroy]"} )
-        %a{:href => "javascript:void(0)", :class=> "remove_nested_fields", :data => {:association => "creators_rels"}} x
+- fields_html =  "<div class='fields'><div class='control-group'><label class='string optional control-label control-label' for='document_creators_rels_attributes_new_creators_rels_name'>Name</label><div class='controls'><input id='document_creators_rels_attributes_new_creators_rels_end_node' name='document[creators_rels_attributes][new_creators_rels][id]' type='hidden'><input class='typeahead creator-typeahead' id='document_creators_rels_attributes_new_creators_rels_end_node_name' name='document[creators_rels_attributes][new_creators_rels][end_node_name]' type='text'><select id='document_creators_rels_attributes_new_creators_rels_class' name='document[creators_rels_attributes][new_creators_rels][class]'><option value='Person'>Person</option><option value='CorporateBody'>Corporate Body</option></select><select id='document_creators_rels_attributes_new_creators_rels_role' name='document[creators_rels_attributes][new_creators_rels][role]'><option value='author'>Author</option><option value='editor'>Editor</option></select><input id='document_creators_rels_attributes_new_creators_rels__destroy' name='document[creators_rels_attributes][new_creators_rels][__destroy]' type='hidden' value='false'><a class='remove_nested_fields' data-association='creators_rels' href='javascript:void(0)'>x</a></div></div></div>"
+%div#creators_rels_fields_blueprint{:style => "display: none", :data => { :blueprint => fields_html }}
+
         
         
         

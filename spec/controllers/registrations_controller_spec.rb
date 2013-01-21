@@ -17,11 +17,11 @@ describe RegistrationsController do
     describe "#create" do
       
       it "should keep a user not as approved and admin if user is not authed" do
-        params = { "user" => { "email" => "chris@fitz.se", "approved"  => "true", "admin" => "true", "password" => "1234567" } }
-        post :create, params
+        params = FactoryGirl.attributes_for(:user)
+        post :create, { :user => params } 
         response.should redirect_to('/')
         flash[:notice].should == "Hello! You account is awaiting approval. We will get back to you shortly."
-        user = User.find(:email => "chris@fitz.se" )
+        user = User.all.first
         user.admin?.should be_false
         user.approved?.should be_false
       end
@@ -52,7 +52,6 @@ describe RegistrationsController do
     login_admin
       it "should only allow admins to update registrations" do
         pending
-        puts @user.inspect
         User.should_receive(:find).twice.and_return(@user)
         @user.should_receive(:update_attributes).once.and_return(true)
         get :update, :id => 666, :approved => true, :email => "foobar@foofoo.com"

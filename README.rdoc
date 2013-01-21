@@ -1,6 +1,13 @@
 # WMU Beacon
 
 
+
+bundle exec spork cucumber & bundle exec spork
+bin/autotest
+
+
+
+
 The story so far: 
 
 $ rails new beacon -m http://andreasronge.github.com/neo4j/rails.rb

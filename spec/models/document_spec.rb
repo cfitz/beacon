@@ -28,9 +28,10 @@ describe Document do
       it "#creator_rels_attributes should work for nested form" do
         document = Document.new
         document.creators_rels_attributes=(  {"blah_blah_new" => { "class" => "Person", "role" => "creator", "end_node_name" => "Joey Joe Joe"}} )
-        document = document.reload_from_database
+        document.save
         document.creators.first.name.should == "Joey Joe Joe"
         document.creators_rels_attributes=(  {"blah_blah_update" => { "id" => document.creators_rels.first.id, "role" => "author" }} )
+        document.save
         document.creators_rels.first.role.should =="author"
         document.creators_rels_attributes=(  {"blah_blah_destroy" => { "__destroy" => "1",  "id" => document.creators_rels.first.id }} )
         document.creators.first.should be_nil

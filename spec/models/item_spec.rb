@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Item do
  
  before(:each) do
-   @item = FactoryGirl.build(:item)
+   @item = FactoryGirl.build(:item_with_document)
  end
  
  it "should be valid" do
