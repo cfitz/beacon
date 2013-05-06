@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 gem 'jruby-openssl', '0.7.7'
 
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.13'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -10,9 +10,9 @@ gem 'neo4j'
 #gem 'neo4j-core', :git => 'git://github.com/andreasronge/neo4j-core.git'
 gem "torquebox-rake-support"
 gem "devise", ">= 2.2.0"
-gem 'devise-neo4j', :git => "git@github.com:cfitz/devise-neo4j.git", :branch => 'devise2'
+gem 'devise-neo4j', :git => "git@github.com:cfitz/devise-neo4j.git"
 #gem 'devise-neo4j', :path => "/Users/chrisfitzpatrick/code/devise-neo4j"
-gem 'omniauth-google-oauth2'
+gem 'omniauth-google-oauth2', '0.1.13'
 gem 'marc'
 gem "haml-rails"
 gem 'tire'
@@ -21,13 +21,14 @@ gem 'will_paginate'
 gem 'simple_form'
 gem "nested_form"
 gem 'rtika'
-gem 'google_drive'
+gem 'google_drive', '0.3.3'
 
 
 group :test, :development do
 #  gem 'neo4j-admin', :git => "git://github.com/andreasronge/neo4j-admin.git"
    gem 'torquebox', '2.1.0'
    gem 'torquebox-capistrano-support'
+   gem 'ZenTest', "4.8.3"
    gem 'rspec-rails','2.11.0'
    gem 'guard-rspec','0.5.5'
    gem 'autotest-rails'

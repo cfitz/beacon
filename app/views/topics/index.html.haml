@@ -5,14 +5,12 @@
   %thead
     %tr
       %th Name
-      %th Type
       %th Number of related documents
   %tbody
     - @topics.each do |topic|
       - unless topic.nil?
         %tr
           %td= link_to(topic.name, topic)
-          %td= topic.class.model_name
           %td= topic.documents.to_a.size
 = page_navigation_links @topics
 

@@ -31,14 +31,10 @@ describe BeaconSearch do
   end
   
   before(:each) do 
-    Tire.index(Thingy.index_name).refresh
+    Tire.index(Thingy.index_name).delete
+    Tire.index(Thingy.index_name).create
   end
-  
-  after(:each) do 
-   Tire.index(Thingy.index_name).delete
-  end
-  
-  
+    
   describe "facets integration" do
     
     it "should return the correct facet results" do
@@ -52,11 +48,14 @@ describe BeaconSearch do
        thing2 = Thingy.create
        thing2.funky << child2 
        thing2.save
-       [thing, thing2].each { |t| t.index.refresh }
-       
+       Thingy.tire.index.refresh
        results = Thingy.elastic_search({ :facet => ["funky_facet:one"]})
+       puts results.inspect
+       puts "facets -----"
+       puts results.facets
+       
        # results.length.should == 1
-       results.first.should == thing
+       results.to_a.first.should == thing
        results.include?(thing2).should be_false
     end
   end

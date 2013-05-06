@@ -7,3 +7,14 @@ Autotest.add_hook :initialize do |autotest|
   %w{.git .DS_Store ._* vendor}.each { |exception| autotest.add_exception(exception) }
   false
 end
+
+
+# From https://github.com/rspec/rspec-core/blob/master/lib/autotest/rspec2.rb,
+# but with "--ng" added.
+class Autotest::Rspec2 < Autotest
+  def make_test_cmd(files_to_test)
+    files_to_test.empty? ? '' :
+      "#{prefix}#{ruby}#{suffix} --ng -S '#{RSPEC_EXECUTABLE}' --tty \
+      #{normalize(files_to_test).keys.flatten.map { |f| "'#{f}'"}.join(' ')}"
+  end
+end

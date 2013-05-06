@@ -5,22 +5,24 @@ jQuery ->
   
   
   bindSearchTypeahead($(".search-query"))
-  
-  
+  $('ul.typeahead').on('mousedown', 'ul.typeahead', ()  =>
+    e.preventDefault()
+  )
+
 bindSearchTypeahead = (node) ->
   node.typeahead(
       source: (typeahead, query) ->
-        $.ajax(
-          dataType: 'json',
-          url: "/search?q="+query
-          success: (data) => 
-           typeahead.process(data)
+        $.getJSON("/search", { q: query }, (data) =>
+            typeahead.process(data)
         )
       autoSelect: false
       property: "name"
+      onkeypress: (obj) =>
+       redirectSelect(obj.url)
       onselect: (obj) =>
        redirectSelect(obj.url)
   )
+
 
 
 redirectSelect = (url) =>

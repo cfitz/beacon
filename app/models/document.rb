@@ -29,9 +29,7 @@ class Document < Neo4j::Rails::Model
 
 
   has_n(:creators).relationship(Creator)  
-  #.from(:Person, :created_work )
-  has_n(:items).to(Item).relationship(WorkItem)
- 
+  has_n(:items).to(Item).relationship(WorkItem) 
   has_n(:topics).to(Topic)
   
   #accepts_nested_attributes_for :creators, :allow_destroy_relationship => true, :reject_if => proc { |attributes| attributes['id'].blank? && attributes['name'].blank? }

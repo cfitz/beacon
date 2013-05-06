@@ -6,6 +6,7 @@ class Topic < Neo4j::Rails::Model
   
 
   property :name, :type => String, :index => :exact
+  alias_attribute :subject, :title
   property :slug, :index => :exact
   
   has_n(:documents).from(:Document, :topics )
@@ -24,6 +25,7 @@ class Topic < Neo4j::Rails::Model
       [  :world_maritime_university_program_facet ]
   end
 
+    
 
   mapping do
       indexes :name, analyzer: 'snowball', boost: 100
