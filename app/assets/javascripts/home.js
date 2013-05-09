@@ -1,2 +1,0 @@
-$('.facets-sidenav').affix();
-
