@@ -10,7 +10,7 @@ gem 'neo4j'
 #gem 'neo4j-core', :git => 'git://github.com/andreasronge/neo4j-core.git'
 gem "torquebox-rake-support"
 gem "devise", ">= 2.2.0"
-gem 'devise-neo4j', :git => "git@github.com:cfitz/devise-neo4j.git"
+gem 'devise-neo4j', :git => "https://github.com/cfitz/devise-neo4j.git"
 #gem 'devise-neo4j', :path => "/Users/chrisfitzpatrick/code/devise-neo4j"
 gem 'omniauth-google-oauth2', '0.1.13'
 gem 'marc'
