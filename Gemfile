@@ -10,7 +10,7 @@ gem 'neo4j'
 #gem 'neo4j-core', :git => 'git://github.com/andreasronge/neo4j-core.git'
 gem "torquebox-rake-support"
 gem "devise", ">= 2.2.0"
-gem 'devise-neo4j', :git => "git@github.com:cfitz/devise-neo4j.git"
+gem 'devise-neo4j', :git => "https://github.com/cfitz/devise-neo4j.git"
 #gem 'devise-neo4j', :path => "/Users/chrisfitzpatrick/code/devise-neo4j"
 gem 'omniauth-google-oauth2', '0.1.13'
 gem 'marc'
@@ -26,10 +26,11 @@ gem 'google_drive', '0.3.3'
 
 group :test, :development do
 #  gem 'neo4j-admin', :git => "git://github.com/andreasronge/neo4j-admin.git"
-   gem 'torquebox', '2.1.0'
+#   gem "torquebox", "2.3.2"
+   gem "torquebox-server"
    gem 'torquebox-capistrano-support'
    gem 'ZenTest', "4.8.3"
-   gem 'rspec-rails','2.11.0'
+   gem 'rspec-rails'
    gem 'guard-rspec','0.5.5'
    gem 'autotest-rails'
    gem 'autotest-fsevent'
