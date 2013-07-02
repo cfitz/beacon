@@ -23,11 +23,11 @@ gem "nested_form"
 gem 'rtika'
 gem 'google_drive', '0.3.3'
 
+gem "torquebox-server"
 
 group :test, :development do
 #  gem 'neo4j-admin', :git => "git://github.com/andreasronge/neo4j-admin.git"
 #   gem "torquebox", "2.3.2"
-   gem "torquebox-server"
    gem 'torquebox-capistrano-support'
    gem 'ZenTest', "4.8.3"
    gem 'rspec-rails'
