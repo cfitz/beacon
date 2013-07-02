@@ -23,13 +23,16 @@ gem "nested_form"
 gem 'rtika'
 gem 'google_drive', '0.3.3'
 
+gem "torquebox-server"
+gem "torquebox"
+gem "bouncy-castle-java"
 
 group :test, :development do
 #  gem 'neo4j-admin', :git => "git://github.com/andreasronge/neo4j-admin.git"
-   gem 'torquebox', '2.1.0'
+#   gem "torquebox", "2.3.2"
    gem 'torquebox-capistrano-support'
    gem 'ZenTest', "4.8.3"
-   gem 'rspec-rails','2.11.0'
+   gem 'rspec-rails'
    gem 'guard-rspec','0.5.5'
    gem 'autotest-rails'
    gem 'autotest-fsevent'
@@ -57,7 +60,7 @@ group :assets do
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyrhino'
   gem "less-rails"
-  gem 'twitter-bootstrap-rails'
+  gem 'twitter-bootstrap-rails', "2.2.6"
   #, :git => "git://github.com/seyhunak/twitter-bootstrap-rails.git"
   #, :branch => "static"
 	
