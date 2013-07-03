@@ -4,10 +4,10 @@ jQuery ->
   $("a[rel=tooltip]").tooltip()
   
   
-  bindSearchTypeahead($(".search-query"))
-  $('ul.typeahead').on('mousedown', 'ul.typeahead', ()  =>
-    e.preventDefault()
-  )
+  # bindSearchTypeahead($(".search-query"))
+  # $('ul.typeahead').on('mousedown', 'ul.typeahead', ()  =>
+  #   e.preventDefault()
+  # )
 
 bindSearchTypeahead = (node) ->
   node.typeahead(

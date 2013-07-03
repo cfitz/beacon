@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
-gem 'jruby-openssl', '0.7.7'
+gem 'jruby-openssl'
+gem "bouncy-castle-java"
+
 
 gem 'rails', '3.2.13'
 
@@ -25,7 +27,6 @@ gem 'google_drive', '0.3.3'
 
 gem "torquebox-server"
 gem "torquebox"
-gem "bouncy-castle-java"
 
 group :test, :development do
 #  gem 'neo4j-admin', :git => "git://github.com/andreasronge/neo4j-admin.git"

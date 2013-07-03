@@ -1,7 +1,6 @@
 .row-fluid
   .span3
     .well.sidebar-nav.facets
-    -# { :data => { :spy=>"affix", "offset-top"=>"20" }} Leaving this out for now.
       %ul.nav.nav-list
         - @facets.each_pair do | facet_label, facet_values| 
           = facet_list(facet_label, facet_values["terms"])

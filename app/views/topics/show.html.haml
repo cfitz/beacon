@@ -3,12 +3,13 @@
   %h1=t '.title', :default => "#{model_class.model_name.human} : #{@topic.name }"
 
 %dl.dl-horizontal
-  %dt 
-    Related Terms
-  %dd
-    %ul
-      - @topic.terms.each do |term|
-        %li=  link_to(term.name, term)
+  - if @topic.terms.length > 0
+    %dt 
+      Related Terms:
+    %dd
+      %ul
+        - @topic.terms.each do |term|
+          %li=  link_to(term.name, term)
 
 
   %dt= model_class.human_attribute_name(:documents) + ":"

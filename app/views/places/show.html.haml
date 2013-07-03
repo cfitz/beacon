@@ -6,8 +6,7 @@
   %dt= model_class.human_attribute_name(:place_type) + ':'
   %dd= @place.place_type.titleize
   %dt= "People:"
-  - @place.members.each do |mem|
-    %dd= link_to( mem.name, person_path(mem) )
+  %dd= @place.members.collect { |mem| link_to( mem.name, person_path(mem) ) }.join(", ").html_safe
   %dt= "Documents:"
   - @place.documents.each do |doc|
     %dd= link_to( doc.title, document_path(doc) )

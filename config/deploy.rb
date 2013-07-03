@@ -25,7 +25,8 @@ set :application, "dissertation.wmu.se"
 default_environment['JRUBY_OPTS'] = '--1.9'
 default_environment['PATH'] = '/opt/torquebox/current/jboss/bin:/opt/torquebox/current/jruby/bin:/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/root/bin:/root/bin'
 
-
+before 'deploy:finalize_update', 'deploy:assets:symlink'
+after 'deploy:update_code', 'deploy:assets:precompile'
 
 default_run_options[:pty] = true  # Must be set for the password prompt from git to work
 set :deploy_via, :remote_cache
@@ -36,11 +37,10 @@ namespace :deploy do
   desc "relink db directory"
    #if you use sqlite
    task :resymlink, :roles => :app do
-     run "rm -rf #{current_path}/db && ln -s /opt/db #{current_path}/db && chown -R torquebox:torquebox  #{current_path}/db"
+     run "mkdir -p #{shared_path}/db; rm -rf #{current_path}/db && ln -s #{shared_path}/db #{current_path}/db && chown -R torquebox:torquebox  #{current_path}/db"
    end
    
    
-namespace :deploy do
     namespace :assets do
       # If you want to force the compilation of assets, just set the ENV['COMPILE_ASSETS']
        task :precompile, :roles => :web do
@@ -57,11 +57,18 @@ namespace :deploy do
           logger.info "Skipping asset precompilation because there were no asset changes"
          end
        end
-  end
+       
+       task :symlink, roles: :web do
+         run ("rm -rf #{latest_release}/public/assets &&
+               mkdir -p #{latest_release}/public &&
+               mkdir -p #{shared_path}/assets &&
+               ln -s #{shared_path}/assets #{latest_release}/public/assets")
+       end
+       
+       
+    end
 end
-
 
  
-end
 
 after 'deploy:update', 'deploy:resymlink'
