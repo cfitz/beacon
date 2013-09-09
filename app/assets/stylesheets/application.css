@@ -16,7 +16,9 @@ body { padding-top: 3.5em; }
 
 
 #home-unit { background-color: #FFD589; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); }
+
 #home-unit h1 { color: #264784; }
+#home-unit p { text-align: center; } 
 
 /* sidebar
 -------------------------------------------------- */
